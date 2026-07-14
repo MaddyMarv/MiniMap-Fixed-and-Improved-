@@ -1,0 +1,139 @@
+local mod = get_mod("minimap")
+local UIWidget = require("scripts/managers/ui/ui_widget")
+local settings = mod:io_dofile("minimap/scripts/mods/minimap/hud_element_minimap/hud_element_minimap_settings")
+
+local template = {}
+
+template.create_widget_definition = function(settings, scenegraph_id)
+    return UIWidget.create_definition({
+        {
+            pass_type = "texture_uv",
+            value = "content/ui/materials/hud/interactions/icons/enemy",
+            style_id = "icon",
+            style = {
+                uvs = {
+                    { 0.1, 0.1 },
+                    { 0.9, 0.9 }
+                },
+                vertical_alignment = "center",
+                horizontal_alignment = "center",
+                offset = { 0, 0, 0 },
+                size = settings.icon_size,
+                color = Color.ui_hud_red_light(255, true)
+            }
+        },
+        {
+            pass_type = "texture_uv",
+            value = "content/ui/materials/hud/interactions/icons/attention",
+            style_id = "icon_passive",
+            style = {
+                uvs = {
+                    { 0.1, 0.1 },
+                    { 0.9, 0.9 }
+                },
+                vertical_alignment = "center",
+                horizontal_alignment = "center",
+                offset = { 0, 0, 0 },
+                size = settings.icon_size,
+                color = { 255, 236, 165, 50 }
+            }
+        },
+        {
+            style_id = "distance_text",
+            pass_type = "text",
+            value_id = "distance_text",
+            value = "",
+            style = {
+                horizontal_alignment = "center",
+                vertical_alignment = "center",
+                text_vertical_alignment = "center",
+                text_horizontal_alignment = "center",
+                drop_shadow = true,
+                font_type = "proxima_nova_bold",
+                font_size = 12,
+                text_color = Color.white(255, true),
+                offset = { 0, 0, 1 },
+                size = { 100, 20 }
+            }
+        },
+    }, scenegraph_id)
+end
+
+template.update_function = function(widget, marker, x, y, vertical_distance, range, is_out_of_range)
+    local icon = widget.style.icon
+    local icon_passive = widget.style.icon_passive
+    icon.offset[1] = x
+    icon.offset[2] = y
+    icon_passive.offset[1] = x
+    icon_passive.offset[2] = y
+
+    local function apply_color_to_texture(texture_style, color)
+        if texture_style and color then
+            if not texture_style.color then
+                texture_style.color = { 255, 255, 255, 255 }
+            end
+            if type(color) == "table" and #color >= 4 then
+                texture_style.color[1] = color[1]
+                texture_style.color[2] = color[2]
+                texture_style.color[3] = color[3]
+                texture_style.color[4] = color[4]
+            else
+                texture_style.color = color
+            end
+        end
+    end
+
+    local marker_icon_style = marker.widget and marker.widget.style and marker.widget.style.icon
+    local color_to_apply = marker_icon_style and marker_icon_style.color or icon.color
+
+    local visual_type = marker.data.visual_type or "default"
+    if visual_type == "passive" then
+        icon.visible = false
+        icon_passive.visible = true
+        apply_color_to_texture(icon_passive, color_to_apply or icon_passive.color)
+    else
+        icon.visible = true
+        icon_passive.visible = false
+        apply_color_to_texture(icon, color_to_apply)
+    end
+    
+
+    local distance_text_style = widget.style.distance_text
+    distance_text_style.offset[1] = x
+    distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
+    
+    local show_distance = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.pings
+    local only_out_of_range = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.only_out_of_range
+    local icon_visible = (icon.visible ~= false) or (icon_passive.visible ~= false)
+    local should_show_distance = show_distance and range and (not only_out_of_range or is_out_of_range) and icon_visible
+    local show_name = false
+    if mod and mod.settings and mod.settings.enemy_name_filters and marker.unit then
+        local breed_type = mod.get_unit_breed_type(marker.unit)
+        show_name = breed_type and mod.settings.enemy_name_filters[breed_type]
+    end
+    local should_show_name = show_name and icon_visible
+    
+    widget.content.distance_text = ""
+    distance_text_style.visible = false
+    
+    local texts = {}
+    if should_show_distance then
+        local distance_m = math.floor(range * 10) / 10
+        texts[#texts+1] = string.format("%.1fm", distance_m)
+    end
+    if should_show_name and marker.unit then
+        if mod and mod.get_enemy_display_name then
+            local name = mod.get_enemy_display_name(marker.unit)
+            if name then
+                texts[#texts+1] = name
+            end
+        end
+    end
+    
+    if #texts > 0 then
+        widget.content.distance_text = table.concat(texts, "\n")
+        distance_text_style.visible = true
+    end
+end
+
+return template
