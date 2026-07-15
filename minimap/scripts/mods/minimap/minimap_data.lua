@@ -53,11 +53,6 @@ return {
     options = {
         widgets = {
             {
-                setting_id = "display_class_icon",
-                type = "checkbox",
-                default_value = true,
-            },
-            {
                 setting_id = "minimap_style_settings",
                 type = "group",
                 tab = mod:localize("tab_general"),
@@ -118,6 +113,18 @@ return {
                         type = "numeric",
                         default_value = 64,
                         range = {0, 255},
+                    },
+                }
+            },
+            {
+                setting_id = "class_icon_settings",
+                type = "group",
+                tab = mod:localize("tab_icons"),
+                sub_widgets = {
+                    {
+                        setting_id = "display_class_icon",
+                        type = "checkbox",
+                        default_value = true,
                     },
                 }
             },
