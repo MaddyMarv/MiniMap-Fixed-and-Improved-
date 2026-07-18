@@ -106,11 +106,11 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local data = marker.data
     local player_slot = data:slot()
     local unit = data.player_unit
-    
+
 
     local template_name = marker.template and marker.template.name
     local is_companion_marker = (template_name == "nameplate_companion" or template_name == "nameplate_companion_hub")
-    
+
     local is_companion = false
     if unit then
         local unit_data_extension = ScriptUnit.has_extension(unit, "unit_data_system")
@@ -120,25 +120,25 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 is_companion = (breed.tags and breed.tags.companion) or (breed.name == "companion_dog")
             end
         end
-        
+
         if not is_companion and is_companion_marker then
             is_companion = true
         end
     elseif is_companion_marker then
         is_companion = true
     end
-    
+
     local icon_style = mod.settings and mod.settings.status_icon_style or "non_glowing"
     local show_disabled_status = (icon_style ~= "hidden")
-    
+
     local status = nil
     if show_disabled_status and unit and not is_companion then
         status = Status.for_unit(unit)
     end
-    
+
     if status then
         local slot_color = UISettings.player_slot_colors[player_slot]
-        
+
         local function get_status_icon_color()
             if slot_color and type(slot_color) == "table" and #slot_color >= 4 then
                 return slot_color
@@ -146,7 +146,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 return Color.white(255, true)
             end
         end
-        
+
         local function apply_color_to_texture(texture_style, color)
             if texture_style and color then
                 if not texture_style.color then
@@ -162,13 +162,13 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 end
             end
         end
-        
+
         if icon_style == "glowing_with_rings" and Status.icons_glowing[status] then
             widget.content.show_status_icon = true
             widget.content.status_icon_texture = Status.icons_glowing[status]
             widget.content.icon_text = ""
             status_icon_style.color = Color.white(255, true)
-            
+
             if slot_color and type(slot_color) == "table" and #slot_color >= 4 then
                 status_icon_ring_style.color = slot_color
             else
@@ -198,12 +198,12 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         widget.content.icon_text = ""
         icon.text_color = UISettings.player_slot_colors[player_slot] or icon.default_text_color
     end
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = nil
     if is_companion then
         show_distance = mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.companions
@@ -220,10 +220,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         show_name = mod.settings and mod.settings.display_names and mod.settings.display_names.display_name_players
     end
     local should_show_name = show_name and icon_visible
-    
+
     widget.content.distance_text = ""
     distance_text_style.visible = false
-    
+
     local texts = {}
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
@@ -240,7 +240,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             texts[#texts+1] = name
         end
     end
-    
+
     if #texts > 0 then
         widget.content.distance_text = table.concat(texts, "\n")
         distance_text_style.visible = true

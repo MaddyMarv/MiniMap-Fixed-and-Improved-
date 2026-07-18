@@ -48,7 +48,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local icon = widget.style.icon
     icon.offset[1] = x
     icon.offset[2] = y
-    
+
     local function apply_color_to_texture(texture_style, color)
         if texture_style and color then
             if not texture_style.color then
@@ -67,7 +67,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
 
     local marker_icon_style = marker.widget and marker.widget.style and marker.widget.style.icon
     local color_to_apply = marker_icon_style and marker_icon_style.color or nil
-    
+
     if not color_to_apply then
         local data = marker.data
         local player = data and data.player
@@ -81,14 +81,14 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         local player_slot = (tagger_player or player) and (tagger_player or player):slot() or 1
         color_to_apply = UISettings.player_slot_colors[player_slot] or Color.ui_hud_green_light(255, true)
     end
-    
+
     apply_color_to_texture(icon, color_to_apply)
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.pings
     local only_out_of_range = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.only_out_of_range
     local icon_visible = icon.visible ~= false
@@ -99,10 +99,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         show_name = breed_type and mod.settings.enemy_name_filters[breed_type]
     end
     local should_show_name = show_name and icon_visible
-    
+
     widget.content.distance_text = ""
     distance_text_style.visible = false
-    
+
     local texts = {}
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
@@ -116,7 +116,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     end
-    
+
     if #texts > 0 then
         widget.content.distance_text = table.concat(texts, "\n")
         distance_text_style.visible = true

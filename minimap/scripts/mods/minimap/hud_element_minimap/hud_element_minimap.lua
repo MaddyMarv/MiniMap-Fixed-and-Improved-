@@ -105,10 +105,7 @@ local function is_bot_marker(marker)
     return false
 end
 
--- Single function that does one extension lookup and returns both breed_type and threat_score
--- This logic has been moved to mod.classify_and_score_unit in minimap.lua
 
--- Reusable tables to avoid per-scan allocations
 local pinged_units = {}
 local companion_targeted_units = {}
 local tracked_enemy_units = {}
@@ -325,7 +322,6 @@ HudElementMinimap._collect_markers = function(self)
     local MAX_MARKERS = 100
     local current_marker_count = 0
 
-    -- Always prioritize non-enemy markers (teammates, pings, objectives)
     for _, marker_info in ipairs(non_enemy_markers) do
         if current_marker_count >= MAX_MARKERS then break end
         markers_data[#markers_data + 1] = marker_info
@@ -369,7 +365,6 @@ HudElementMinimap._collect_markers = function(self)
                                 end
                             end
                         end
-                        -- If we didn't hit the minimum threshold, undo this cluster
                         if root_marker.marker.cluster_count < cluster_threshold then
                             root_marker.marker.cluster_count = 1
                             for _, j in ipairs(absorbed_by_this_root) do
@@ -385,7 +380,7 @@ HudElementMinimap._collect_markers = function(self)
             for i = 1, #markers do
                 if visible_count >= limit then break end
                 if current_marker_count >= MAX_MARKERS then break end
-                
+
                 if not clustered_indices[i] then
                     markers_data[#markers_data + 1] = markers[i]
                     current_marker_count = current_marker_count + 1
@@ -401,7 +396,6 @@ end
 HudElementMinimap._get_marker_azimuth_range = function(self, marker)
     local marker_position
 
-    -- Support pooled enemy markers (raw x/y/z) and normal markers (Vector3Box)
     if marker.pos_x then
         marker_position = Vector3(marker.pos_x, marker.pos_y, marker.pos_z)
     elseif marker.position and marker.position.unbox then
@@ -442,38 +436,36 @@ local marker_name_to_icon = {
     location_ping = "ping",
     location_threat = "threat",
     unit_threat = "threat",
-    unit_threat_adamant = "companion_target", -- companion target skull
+    unit_threat_adamant = "companion_target",
     unit_threat_companion = "companion_target",
     unit_threat_veteran = "companion_target",
-    nameplate = "player", -- in hub
-    nameplate_party = "teammate", -- in mission
-    nameplate_party_hud = "teammate", -- in mission HUD
-    nameplate_combat = "teammate", -- in mission (combat)
-    nameplate_companion = "teammate", -- companions
-    nameplate_companion_hub = "player", -- companions in hub
-    ringhud_teammate_tile = "teammate", -- RingHud compatibility
+    nameplate = "player",
+    nameplate_party = "teammate",
+    nameplate_party_hud = "teammate",
+    nameplate_combat = "teammate",
+    nameplate_companion = "teammate",
+    nameplate_companion_hub = "player",
+    ringhud_teammate_tile = "teammate",
     objective = "objective",
     player_assistance = "none",
     interaction = "interactable",
 
     health_bar = "none",
-    -- Health bar mods (kept for backward compatibility)
     color_coded_healthbar = "enemy",
     custom_healthbar = "enemy",
-    -- Direct enemy tracking via broadphase
     enemy = "enemy",
 }
 
 local function get_icon_name_from_marker_info(marker_info)
     local settings = mod.settings or {}
-    
+
     if marker_info.name == "enemy" then
         if not settings.enemy_radar_enabled then
             return "none"
         end
         return "enemy"
     end
-    
+
     local visibility = settings.icon_vis and settings.icon_vis[marker_info.name]
     if not visibility then
         return "none"
@@ -560,25 +552,25 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
     local enemy_radar_enabled = settings.enemy_radar_enabled
     local melee_ring_enabled = settings.enemy_radar_melee_ring_enabled
     local melee_ring_widget = self._widgets_by_name.melee_range_ring
-    
+
     if melee_ring_widget then
     if enemy_radar_enabled and melee_ring_enabled then
             local melee_range = settings.enemy_radar_melee_range or 2.5
             local max_range = self._settings.max_range
             local minimap_radius = self._settings.radius
             local ring_radius = (melee_range / max_range) * minimap_radius
-            
+
             if ring_radius <= minimap_radius then
                 local circle_style = melee_ring_widget.style.ring_circle
                 circle_style.size[1] = ring_radius * 2
                 circle_style.size[2] = ring_radius * 2
-                
+
                 local ring_r = settings.enemy_radar_melee_ring_color_r or 180
                 local ring_g = settings.enemy_radar_melee_ring_color_g or 180
                 local ring_b = settings.enemy_radar_melee_ring_color_b or 180
                 local ring_opacity = settings.enemy_radar_melee_ring_opacity or 40
                 circle_style.color = { ring_opacity, ring_r, ring_g, ring_b }
-                
+
                 melee_ring_widget.alpha_multiplier = 1.0
                 UIWidget.draw(melee_ring_widget, ui_renderer)
             else

@@ -124,12 +124,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local data = marker.data
     local player_slot = data:slot()
     local unit = data.player_unit
-    
-    -- Check if this is a companion by checking the marker template name first, then unit's breed
+
     local template_name = marker.template and marker.template.name
     local is_companion_marker = (template_name == "nameplate_companion" or template_name == "nameplate_companion_hub")
-    
-    -- Check if this is a companion by checking the unit's breed
+
     local is_companion = false
     local owner_player = nil
     local owner_unit = nil
@@ -138,17 +136,14 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         if unit_data_extension then
             local breed = unit_data_extension:breed()
             if breed then
-                -- Check if breed has companion tag or is companion_dog
                 is_companion = (breed.tags and breed.tags.companion) or (breed.name == "companion_dog")
             end
         end
-        
-        -- Also check marker template name as fallback
+
         if not is_companion and is_companion_marker then
             is_companion = true
         end
-        
-        -- Get owner player if this is a companion
+
         if is_companion then
             local player_unit_spawn_manager = Managers.state.player_unit_spawn
             if player_unit_spawn_manager then
@@ -159,15 +154,12 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     elseif is_companion_marker then
-        -- If no unit but marker is companion type, treat as companion
         is_companion = true
     end
-    
-    -- Check if disabled teammates visibility is enabled (based on dropdown setting)
+
     local icon_style = mod.settings and mod.settings.status_icon_style or "non_glowing"
     local show_disabled_status = (icon_style ~= "hidden")
-    
-    -- Check if this is the local player's own dog
+
     local is_local_player_dog = false
     if is_companion and owner_player then
         local local_player = Managers.player:local_player(1)
@@ -175,28 +167,20 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             is_local_player_dog = true
         end
     end
-    
-    -- For companions, don't check status at all - only show status on the player, not the dog
-    -- This prevents the dog icon from showing downed/disabled status
-    -- For regular teammates, check their own status
+
     local status = nil
     if show_disabled_status and unit and not is_companion then
-        -- Only check status for regular teammates, not for companions (dogs)
         status = Status.for_unit(unit)
     end
-    
-    -- If teammate/owner has a disabled status, show status icon with player slot color
+
     if status then
         local slot_color = UISettings.player_slot_colors[player_slot]
-        
-        -- Handle different icon styles based on dropdown setting
+
         if icon_style == "glowing_with_rings" and Status.icons_glowing[status] then
             widget.content.show_status_icon = true
             widget.content.status_icon_texture = Status.icons_glowing[status]
-            -- Glowing icons are pre-colored and don't tint
             status_icon_style.color = Color.white(255, true)
-            
-            -- Apply player slot color to status icon ring
+
             if slot_color and type(slot_color) == "table" and #slot_color >= 4 then
                 status_icon_ring_style.color = slot_color
             else
@@ -205,26 +189,22 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         elseif icon_style == "glowing_no_rings" and Status.icons_glowing[status] then
             widget.content.show_status_icon = true
             widget.content.status_icon_texture = Status.icons_glowing[status]
-            -- Glowing icons are pre-colored and don't tint
             status_icon_style.color = Color.white(255, true)
         elseif icon_style == "non_glowing_with_rings" and Status.icons[status] then
             widget.content.show_status_icon = true
             widget.content.status_icon_texture = Status.icons[status]
-            
-            -- Apply player slot color to status icon (non-glowing icons can be tinted)
+
             if slot_color and type(slot_color) == "table" and #slot_color >= 4 then
                 status_icon_style.color = slot_color
             else
                 status_icon_style.color = Color.white(255, true)
             end
-            
-            -- Apply silver/gold color to status icon ring for non-glowing version
+
             status_icon_ring_style.color = Color.silver(255, true)
         elseif Status.icons[status] then
             widget.content.show_status_icon = true
             widget.content.status_icon_texture = Status.icons[status]
-            
-            -- Apply player slot color to status icon (non-glowing icons can be tinted)
+
             if slot_color and type(slot_color) == "table" and #slot_color >= 4 then
                 status_icon_style.color = slot_color
             else
@@ -232,40 +212,35 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     else
-        -- Normal state - show class icon or dog icon for companions
         widget.content.show_status_icon = false
-        
-        -- Check if we're in the hub (mourning star)
+
         local game_mode_manager = Managers.state and Managers.state.game_mode
         local is_in_hub = false
         if game_mode_manager then
             local game_mode_name = game_mode_manager:game_mode_name()
             is_in_hub = (game_mode_name == "hub" or game_mode_name == "prologue_hub")
         end
-        
+
         if is_companion then
-            -- Check visibility settings (reuse is_local_player_dog from earlier check)
             local show_own_dog = mod.settings and mod.settings.own_dog_vis ~= false
             local show_teammate_dog = mod.settings and mod.settings.teammate_dog_vis ~= false
-            
-            -- Only show if visibility is enabled for this type of dog
+
             if (is_local_player_dog and show_own_dog) or (not is_local_player_dog and show_teammate_dog) then
-                -- Get dog icon style setting
                 local dog_icon_style = mod.settings and mod.settings.dog_icon_style or "dog_icon"
-                
+
                 local target_slot = player_slot
                 local owner_profile = nil
                 if owner_player then
                     target_slot = owner_player:slot()
                     owner_profile = owner_player:profile()
                 end
-                
+
                 if dog_icon_style == "class_icon" and owner_profile then
                     widget.content.show_companion_icon = false
                     local archetype_name = owner_profile.archetype and owner_profile.archetype.name
                     local string_symbol = archetype_name and UISettings.archetype_font_icon[archetype_name] or "•"
                     widget.content.icon_text = string_symbol
-                    
+
                     if is_in_hub then
                         icon.text_color = Color.ui_hud_green_light(255, true)
                     else
@@ -274,7 +249,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 elseif dog_icon_style == "unicode_icon" then
                     widget.content.show_companion_icon = false
                     widget.content.icon_text = "\u{E051}"
-                    
+
                     if is_in_hub then
                         icon.text_color = Color.ui_hud_green_light(255, true)
                     else
@@ -283,7 +258,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 else
                     widget.content.show_companion_icon = true
                     widget.content.companion_icon_texture = "content/ui/materials/icons/throwables/hud/adamant_whistle"
-                    
+
                     if is_in_hub then
                         companion_icon_style.color = Color.ui_hud_green_light(255, true)
                     else
@@ -296,18 +271,15 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                     end
                 end
             else
-                -- Companion visibility is disabled, don't show it
                 widget.content.show_companion_icon = false
                 widget.content.icon_text = ""
             end
         else
-            -- Regular teammate - show class icon
             widget.content.show_companion_icon = false
             local profile = data:profile()
             local archetype_name = profile.archetype and profile.archetype.name
             local string_symbol = archetype_name and UISettings.archetype_font_icon[archetype_name] or "•"
             widget.content.icon_text = string_symbol
-            -- In hub, use same color for everyone. In mission, use player slot color
             if is_in_hub then
                 icon.text_color = Color.ui_hud_green_light(255, true)
             else
@@ -315,12 +287,12 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     end
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = nil
     if is_companion then
         show_distance = mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.companions
@@ -337,10 +309,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         show_name = mod.settings and mod.settings.display_names and mod.settings.display_names.display_name_players
     end
     local should_show_name = show_name and icon_visible
-    
+
     widget.content.distance_text = ""
     distance_text_style.visible = false
-    
+
     local texts = {}
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
@@ -357,7 +329,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             texts[#texts+1] = name
         end
     end
-    
+
     if #texts > 0 then
         widget.content.distance_text = table.concat(texts, "\n")
         distance_text_style.visible = true

@@ -65,7 +65,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local icon = widget.style.icon
     icon.offset[1] = x
     icon.offset[2] = y
-    
+
     local function apply_color_to_texture(texture_style, color)
         if texture_style and color then
             if not texture_style.color then
@@ -86,8 +86,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local vertical_distance_enabled = settings.enemy_radar_vertical_distance_enabled
     local vertical_distance_threshold = settings.enemy_radar_vertical_distance_threshold or 3.0
     local vertical_distance_transparency = settings.enemy_radar_vertical_distance_transparency or 40
-    
-    -- Calculate alpha based on vertical distance
+
     local alpha = 255
     if vertical_distance_enabled and vertical_distance and vertical_distance > vertical_distance_threshold then
         alpha = vertical_distance_transparency
@@ -97,7 +96,6 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     if marker_icon_style and marker_icon_style.color then
         local color = marker_icon_style.color
         if type(color) == "table" and #color >= 3 then
-            -- Preserve RGB, update alpha
             color = { color[1], color[2], color[3], alpha }
         end
         apply_color_to_texture(icon, color)
@@ -108,43 +106,37 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 local color = { alpha, breed_color[1], breed_color[2], breed_color[3] }
                 apply_color_to_texture(icon, color)
             else
-                -- Default color with transparency
                 if not icon.color or (type(icon.color) == "table" and icon.color[4] ~= alpha) then
                     icon.color = Color.dark_red(alpha, true)
                 else
-                    -- Update alpha of existing color
                     if type(icon.color) == "table" and #icon.color >= 4 then
                         icon.color[4] = alpha
                     end
                 end
             end
         else
-            -- Default color with transparency
             if not icon.color or (type(icon.color) == "table" and icon.color[4] ~= alpha) then
                 icon.color = Color.dark_red(alpha, true)
             else
-                -- Update alpha of existing color
                 if type(icon.color) == "table" and #icon.color >= 4 then
                     icon.color[4] = alpha
                 end
             end
         end
     else
-        -- Default color with transparency
         if not icon.color or (type(icon.color) == "table" and icon.color[4] ~= alpha) then
             icon.color = Color.dark_red(alpha, true)
         else
-            -- Update alpha of existing color
             if type(icon.color) == "table" and #icon.color >= 4 then
                 icon.color[4] = alpha
             end
         end
     end
-    
+
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (minimap_settings.icon_size[2] * 0.5) + 8
-    
+
     local distance_markers = settings.distance_markers
     local show_distance = distance_markers and distance_markers.enemies
     local only_out_of_range = distance_markers and distance_markers.only_out_of_range
@@ -155,10 +147,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     local show_name = not only_pinged and settings.enemy_name_filters and breed_type and settings.enemy_name_filters[breed_type]
     local is_clustered = marker.cluster_count and marker.cluster_count > 1
     local should_show_name = show_name and icon_visible and not is_clustered
-    
+
     widget.content.distance_text = ""
     distance_text_style.visible = false
-    
+
     local texts = {}
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
@@ -172,23 +164,22 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     end
-    
+
     if #texts > 0 then
         widget.content.distance_text = table.concat(texts, "\n")
         distance_text_style.visible = true
         distance_text_style.text_color = Color.white(alpha, true)
     end
-    
+
     local cluster_text_style = widget.style.cluster_text
     cluster_text_style.offset[1] = x
-    
-    -- Position it under the dot. If distance text is showing, push it a bit further down so they don't overlap.
+
     if should_show_distance then
         cluster_text_style.offset[2] = y + (minimap_settings.icon_size[2] * 0.5) + 20
     else
         cluster_text_style.offset[2] = y + (minimap_settings.icon_size[2] * 0.5) + 8
     end
-    
+
     if marker.cluster_count and marker.cluster_count > 1 then
         local show_type = true
         if settings.enemy_clustering_show_type ~= nil then

@@ -104,15 +104,15 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         else
             widget.content.icon = interaction_icon
         end
-        
+
         if marker.widget.style then
             local marker_icon_style = marker.widget.style.icon
             local marker_ring_style = marker.widget.style.ring
-            
+
             if marker_icon_style and marker_icon_style.color then
                 apply_color_to_texture(icon, marker_icon_style.color)
             end
-            
+
             if marker_ring_style and marker_ring_style.color then
                 apply_color_to_texture(ring, marker_ring_style.color)
             end
@@ -120,16 +120,16 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     else
         widget.content.icon = interaction_icon
     end
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.interactables
     local only_out_of_range = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.only_out_of_range
     local should_show = show_distance and range and (not only_out_of_range or is_out_of_range) and icon.visible
-    
+
     if should_show then
         local distance_m = math.floor(range * 10) / 10
         widget.content.distance_text = string.format("%.1fm", distance_m)

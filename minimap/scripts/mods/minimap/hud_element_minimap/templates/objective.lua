@@ -165,17 +165,17 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         demo2.visible = false
         demo3.visible = false
     end
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.objectives
     local only_out_of_range = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.only_out_of_range
     local icon_visible = (main.visible ~= false) or (main2.visible ~= false) or (demo1.visible ~= false) or (demo2.visible ~= false) or (demo3.visible ~= false)
     local should_show = show_distance and range and (not only_out_of_range or is_out_of_range) and icon_visible
-    
+
     if should_show then
         local distance_m = math.floor(range * 10) / 10
         widget.content.distance_text = string.format("%.1fm", distance_m)

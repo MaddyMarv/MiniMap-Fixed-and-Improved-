@@ -96,12 +96,12 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         icon_passive.visible = false
         apply_color_to_texture(icon, color_to_apply)
     end
-    
+
 
     local distance_text_style = widget.style.distance_text
     distance_text_style.offset[1] = x
     distance_text_style.offset[2] = y + (settings.icon_size[2] * 0.5) + 12
-    
+
     local show_distance = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.pings
     local only_out_of_range = mod and mod.settings and mod.settings.distance_markers and mod.settings.distance_markers.only_out_of_range
     local icon_visible = (icon.visible ~= false) or (icon_passive.visible ~= false)
@@ -112,10 +112,10 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         show_name = breed_type and mod.settings.enemy_name_filters[breed_type]
     end
     local should_show_name = show_name and icon_visible
-    
+
     widget.content.distance_text = ""
     distance_text_style.visible = false
-    
+
     local texts = {}
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
@@ -129,7 +129,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             end
         end
     end
-    
+
     if #texts > 0 then
         widget.content.distance_text = table.concat(texts, "\n")
         distance_text_style.visible = true

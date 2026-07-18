@@ -415,7 +415,6 @@ local loc = {
         en = "Show Melee Elite Names",
         ["zh-cn"] = "显示近战精英名称",
     },
-    -- Specific Special Enemies
     color_chaos_hound = {
         en = "Pox Hound",
         ["zh-cn"] = "瘟疫猎犬",
@@ -512,7 +511,6 @@ local loc = {
         en = "Blue",
         ["zh-cn"] = "蓝",
     },
-    -- Specific Elite Enemies
     color_executor = {
         en = "Executors (All)",
         ["zh-cn"] = "血痂重锤兵与粉碎者（全部）",
@@ -577,7 +575,6 @@ local loc = {
         en = "Blue",
         ["zh-cn"] = "蓝",
     },
-    -- Generic Categories
     color_special = {
         en = "Generic Special",
         ["zh-cn"] = "通用特殊",
@@ -760,7 +757,6 @@ local loc = {
     },
 }
 
--- Auto-generate colored localization for all color names from Color.list
 for _, color_name in ipairs(Color.list) do
     local c = Color[color_name](255, true)
     local text = string.format("{#color(%s,%s,%s)}%s{#reset()}", c[2], c[3], c[4], string.gsub(color_name, "_", " "))
