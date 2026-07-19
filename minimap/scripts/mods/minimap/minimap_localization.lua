@@ -18,6 +18,10 @@ local loc = {
     tab_enemy_radar = {
         en = "Enemy Radar",
     },
+    tab_strike_map = {
+        en = "Strike Map",
+        ["zh-cn"] = "打击地图",
+    },
     class_icon_settings = {
         en = "Class Icon Settings",
         ["zh-cn"] = "职业图标设置",
@@ -751,6 +755,65 @@ local loc = {
     display_name_companions = {
         en = "Show Dog/Companion Names",
         ["zh-cn"] = "显示猎犬/同伴名称",
+    },
+    strike_map_dimensions = {
+        en = "Strike Map Dimensions",
+        ["zh-cn"] = "打击地图尺寸",
+    },
+    strike_map_height = {
+        en = "Height",
+        ["zh-cn"] = "高度",
+    },
+    strike_map_half_height = {
+        en = "Half Height",
+        ["zh-cn"] = "半高",
+    },
+    strike_map_depth = {
+        en = "Depth / Z-Offset",
+        ["zh-cn"] = "深度/Z轴偏移",
+    },
+    strike_map_floors = {
+        en = "Floor Colors & Opacities",
+        ["zh-cn"] = "楼层颜色和不透明度",
+    },
+    strike_map_floor_above = {
+        en = "Floor Above",
+        ["zh-cn"] = "上一层",
+    },
+    color_strike_map_floor_above = {
+        en = "Color (Above)",
+    },
+    color_strike_map_floor_above_r = { en = "Red" },
+    color_strike_map_floor_above_g = { en = "Green" },
+    color_strike_map_floor_above_b = { en = "Blue" },
+    color_strike_map_floor_above_opacity = {
+        en = "Opacity (Above)",
+    },
+    strike_map_floor_current = {
+        en = "Current Floor",
+        ["zh-cn"] = "当前层",
+    },
+    color_strike_map_floor_current = {
+        en = "Color (Current)",
+    },
+    color_strike_map_floor_current_r = { en = "Red" },
+    color_strike_map_floor_current_g = { en = "Green" },
+    color_strike_map_floor_current_b = { en = "Blue" },
+    color_strike_map_floor_current_opacity = {
+        en = "Opacity (Current)",
+    },
+    strike_map_floor_below = {
+        en = "Floor Below",
+        ["zh-cn"] = "下一层",
+    },
+    color_strike_map_floor_below = {
+        en = "Color (Below)",
+    },
+    color_strike_map_floor_below_r = { en = "Red" },
+    color_strike_map_floor_below_g = { en = "Green" },
+    color_strike_map_floor_below_b = { en = "Blue" },
+    color_strike_map_floor_below_opacity = {
+        en = "Opacity (Below)",
     },
 }
 

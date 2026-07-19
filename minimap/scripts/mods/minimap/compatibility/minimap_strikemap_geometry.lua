@@ -319,14 +319,16 @@ local function _submit_triangle(gui, sx1, sy1, sx2, sy2, sx3, sy3, layer, color)
 end
 
 local function _band_color(prefix, fallback)
-    local color = fallback
-    local alpha = tonumber(color[1]) or 0
+    local r = mod:get(prefix .. "_r") or fallback[2]
+    local g = mod:get(prefix .. "_g") or fallback[3]
+    local b = mod:get(prefix .. "_b") or fallback[4]
+    local alpha = mod:get(prefix .. "_opacity") or fallback[1]
 
     if alpha <= 0 then
         return nil
     end
 
-    return Color(alpha, color[2] or 255, color[3] or 255, color[4] or 255)
+    return Color(alpha, r, g, b)
 end
 
 local function _clamp_band_range(value, default_value)
@@ -343,16 +345,17 @@ end
 
 local function _draw_geometry(ui_renderer, context, player_pos, rotation, center_x, center_y, z, projection_radius,
                               range, radar_style)
-    local current_color = _band_color("radar_navmesh", BAND_CURRENT_FALLBACK_COLOR)
-    local above_color = _band_color("radar_navmesh_above", BAND_ABOVE_FALLBACK_COLOR)
-    local below_color = _band_color("radar_navmesh_below", BAND_BELOW_FALLBACK_COLOR)
+    local current_color = _band_color("color_strike_map_floor_current", BAND_CURRENT_FALLBACK_COLOR)
+    local above_color = _band_color("color_strike_map_floor_above", BAND_ABOVE_FALLBACK_COLOR)
+    local below_color = _band_color("color_strike_map_floor_below", BAND_BELOW_FALLBACK_COLOR)
 
     if not current_color and not above_color and not below_color then
         return
     end
 
-    local range_above = DEFAULT_RANGE_ABOVE
-    local range_below = DEFAULT_RANGE_BELOW
+    local range_above = mod:get("strike_map_height") or DEFAULT_RANGE_ABOVE
+    local range_below = mod:get("strike_map_depth") or DEFAULT_RANGE_BELOW
+    local current_floor_half_height = mod:get("strike_map_half_height") or CURRENT_FLOOR_HALF_HEIGHT
 
     _ensure_grid(context)
 
@@ -449,9 +452,9 @@ local function _draw_geometry(ui_renderer, context, player_pos, rotation, center
                             local color = nil
 
                             if dz <= range_above and dz >= -range_below then
-                                if dz > CURRENT_FLOOR_HALF_HEIGHT then
+                                if dz > current_floor_half_height then
                                     color = above_color
-                                elseif dz < -CURRENT_FLOOR_HALF_HEIGHT then
+                                elseif dz < -current_floor_half_height then
                                     color = below_color
                                 else
                                     color = current_color

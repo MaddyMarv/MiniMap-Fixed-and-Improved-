@@ -538,50 +538,6 @@ local function collect_settings()
     }
 end
 
-mod:command("minimap_debug_colors", "Show loaded enemy colors", function()
-    mod:echo("=== Minimap Enemy Colors ===")
-    mod:echo("Specific Specials:")
-    mod:echo(string.format("  Pox Hound: %d, %d, %d",
-        mod.fallback_breed_colors.chaos_hound[1],
-        mod.fallback_breed_colors.chaos_hound[2],
-        mod.fallback_breed_colors.chaos_hound[3]))
-    mod:echo(string.format("  Sniper: %d, %d, %d",
-        mod.fallback_breed_colors.renegade_sniper[1],
-        mod.fallback_breed_colors.renegade_sniper[2],
-        mod.fallback_breed_colors.renegade_sniper[3]))
-    mod:echo("")
-    mod:echo("Specific Elites:")
-    mod:echo(string.format("  Executors (All): %d, %d, %d",
-        mod.fallback_breed_colors.chaos_ogryn_executor[1],
-        mod.fallback_breed_colors.chaos_ogryn_executor[2],
-        mod.fallback_breed_colors.chaos_ogryn_executor[3]))
-    mod:echo(string.format("  Ragers (All): %d, %d, %d",
-        mod.fallback_breed_colors.renegade_berzerker[1],
-        mod.fallback_breed_colors.renegade_berzerker[2],
-        mod.fallback_breed_colors.renegade_berzerker[3]))
-    mod:echo(string.format("  Plasma Gunner: %d, %d, %d",
-        mod.fallback_breed_colors.renegade_plasma_gunner[1],
-        mod.fallback_breed_colors.renegade_plasma_gunner[2],
-        mod.fallback_breed_colors.renegade_plasma_gunner[3]))
-    mod:echo(string.format("  Bulwark: %d, %d, %d",
-        mod.fallback_breed_colors.chaos_ogryn_bulwark[1],
-        mod.fallback_breed_colors.chaos_ogryn_bulwark[2],
-        mod.fallback_breed_colors.chaos_ogryn_bulwark[3]))
-    mod:echo("")
-    mod:echo("Generic Categories:")
-    mod:echo(string.format("  Special: %d, %d, %d",
-        mod.fallback_breed_colors.special[1],
-        mod.fallback_breed_colors.special[2],
-        mod.fallback_breed_colors.special[3]))
-    mod:echo(string.format("  Elite Melee: %d, %d, %d",
-        mod.fallback_breed_colors.elite_melee[1],
-        mod.fallback_breed_colors.elite_melee[2],
-        mod.fallback_breed_colors.elite_melee[3]))
-    mod:echo(string.format("  Monster: %d, %d, %d",
-        mod.fallback_breed_colors.monster[1],
-        mod.fallback_breed_colors.monster[2],
-        mod.fallback_breed_colors.monster[3]))
-end)
 
 mod.on_all_mods_loaded = function()
     mod.fallback_breed_colors = load_breed_colors_from_settings()

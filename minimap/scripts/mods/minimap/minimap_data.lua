@@ -627,6 +627,80 @@ return {
                     },
                 },
             },
+            {
+                setting_id = "strike_map_dimensions",
+                type = "group",
+                tab = mod:localize("tab_strike_map"),
+                sub_widgets = {
+                    {
+                        setting_id = "strike_map_height",
+                        type = "numeric",
+                        default_value = 3.0,
+                        range = {0.0, 20.0},
+                        decimals_number = 1,
+                    },
+                    {
+                        setting_id = "strike_map_half_height",
+                        type = "numeric",
+                        default_value = 2.5,
+                        range = {0.0, 10.0},
+                        decimals_number = 1,
+                    },
+                    {
+                        setting_id = "strike_map_depth",
+                        type = "numeric",
+                        default_value = 7.0,
+                        range = {0.0, 20.0},
+                        decimals_number = 1,
+                    },
+                },
+            },
+            {
+                setting_id = "strike_map_floors",
+                type = "group",
+                tab = mod:localize("tab_strike_map"),
+                sub_widgets = {
+                    {
+                        setting_id = "strike_map_floor_above",
+                        type = "group",
+                        sub_widgets = {
+                            create_color_group("color_strike_map_floor_above", 120, 150, 185),
+                            {
+                                setting_id = "color_strike_map_floor_above_opacity",
+                                type = "numeric",
+                                default_value = 60,
+                                range = {0, 255},
+                            },
+                        },
+                    },
+                    {
+                        setting_id = "strike_map_floor_current",
+                        type = "group",
+                        sub_widgets = {
+                            create_color_group("color_strike_map_floor_current", 101, 133, 96),
+                            {
+                                setting_id = "color_strike_map_floor_current_opacity",
+                                type = "numeric",
+                                default_value = 120,
+                                range = {0, 255},
+                            },
+                        },
+                    },
+                    {
+                        setting_id = "strike_map_floor_below",
+                        type = "group",
+                        sub_widgets = {
+                            create_color_group("color_strike_map_floor_below", 120, 98, 76),
+                            {
+                                setting_id = "color_strike_map_floor_below_opacity",
+                                type = "numeric",
+                                default_value = 80,
+                                range = {0, 255},
+                            },
+                        },
+                    },
+                },
+            },
         }
     }
 }
