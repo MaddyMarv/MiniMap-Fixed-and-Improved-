@@ -658,3 +658,5 @@ mod.on_setting_changed = function(setting_id)
         recreate_hud()
     end
 end
+
+mod:io_dofile("minimap/scripts/mods/minimap/compatibility/minimap_strikemap")

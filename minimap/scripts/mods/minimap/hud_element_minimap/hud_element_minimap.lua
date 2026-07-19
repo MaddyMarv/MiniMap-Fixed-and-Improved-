@@ -3,6 +3,7 @@ local mod = get_mod("minimap")
 local UIWidget = require("scripts/managers/ui/ui_widget")
 local ScriptCamera = require("scripts/foundation/utilities/script_camera")
 local PlayerUnitStatus = require("scripts/utilities/attack/player_unit_status")
+local MinimapStrikemapGeometry = mod:io_dofile("minimap/scripts/mods/minimap/compatibility/minimap_strikemap_geometry")
 
 local math_sin = math.sin
 local math_cos = math.cos
@@ -548,6 +549,31 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
     fov_indicator_style.fov_right.angle = -hfov / 2
 
     HudElementMinimap.super._draw_widgets(self, dt, t, input_service, ui_renderer)
+
+    if MinimapStrikemapGeometry.is_active(t) then
+        local pos = self:scenegraph_world_position("minimap_center", ui_renderer.scale)
+        if pos then
+            local center_x = pos[1] or 0
+            local center_y = pos[2] or 0
+            local snapshot = nil
+            local rotation = nil
+            local camera = self._parent:player_camera()
+            if camera then
+                snapshot = { player_position = ScriptCamera.position(camera) }
+                rotation = ScriptCamera.rotation(camera)
+            elseif local_player and local_player.player_unit and Unit.alive(local_player.player_unit) then
+                snapshot = { player_position = Unit.world_position(local_player.player_unit, 1) }
+                rotation = Unit.local_rotation(local_player.player_unit, 1)
+            end
+
+            local z = 0
+            local projection_radius = self._settings.radius
+            local range = self._settings.max_range
+            local radar_style = "circle"
+
+            MinimapStrikemapGeometry.draw(ui_renderer, snapshot, center_x, center_y, z, projection_radius, range, rotation, radar_style, t)
+        end
+    end
 
     local enemy_radar_enabled = settings.enemy_radar_enabled
     local melee_ring_enabled = settings.enemy_radar_melee_ring_enabled

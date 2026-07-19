@@ -16,6 +16,13 @@ local scenegraph_definition = {
         size = settings.size,
         position = settings.position,
     },
+    minimap_center = {
+        parent = "minimap",
+        vertical_alignment = "center",
+        horizontal_alignment = "center",
+        size = { 0, 0 },
+        position = { 0, 0, 0 },
+    },
 }
 
 local widget_definitions = {
