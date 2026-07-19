@@ -13,7 +13,6 @@ local math_tan = math.tan
 local table_sort = table.sort
 local table_clear = table.clear
 
-
 local definitions = mod:io_dofile("minimap/scripts/mods/minimap/hud_element_minimap/hud_element_minimap_definitions")
 
 local HudElementMinimap = class("HudElementMinimap", "HudElementBase")
@@ -105,7 +104,6 @@ local function is_bot_marker(marker)
 
     return false
 end
-
 
 local pinged_units = {}
 local companion_targeted_units = {}
@@ -394,24 +392,33 @@ HudElementMinimap._collect_markers = function(self)
     return markers_data
 end
 
-HudElementMinimap._get_marker_azimuth_range = function(self, marker)
+HudElementMinimap._get_marker_azimuth_range = function(self, marker, camera_position, camera_forward)
+    if not marker then
+        return 0, 0, 0
+    end
+
     local marker_position
 
-    if marker.pos_x then
-        marker_position = Vector3(marker.pos_x, marker.pos_y, marker.pos_z)
-    elseif marker.position and marker.position.unbox then
+    if marker.position and marker.position.unbox then
         marker_position = marker.position:unbox()
+    elseif marker.unit and Unit.alive(marker.unit) and Unit.world(marker.unit) then
+        marker_position = Unit.world_position(marker.unit, 1)
+    elseif marker.pos_x then
+        marker_position = Vector3(marker.pos_x, marker.pos_y, marker.pos_z)
     end
 
     if marker_position then
-        local camera = self._parent:player_camera()
+        if not camera_position or not camera_forward then
+            local camera = self._parent:player_camera()
 
-        if not camera then
-            return 0, 0, 0
+            if not camera then
+                return 0, 0, 0
+            end
+
+            camera_position = ScriptCamera.position(camera)
+            camera_forward = Quaternion.forward(ScriptCamera.rotation(camera))
         end
 
-        local camera_position = ScriptCamera.position(camera)
-        local camera_forward = Quaternion.forward(ScriptCamera.rotation(camera))
         local diff_vector = marker_position - camera_position
         local vertical_distance = math_abs(diff_vector.z)
         diff_vector.z = 0
@@ -479,7 +486,7 @@ local function get_icon_name_from_marker_info(marker_info)
     return icon_name
 end
 
-HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_renderer)
+HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_renderer, camera_position, camera_forward)
     local icon_name = get_icon_name_from_marker_info(marker_info)
 
     if icon_name == "none" or icon_name == "unknown" then
@@ -487,17 +494,28 @@ HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_render
     end
 
     local widget = self._icon_widgets_by_name[icon_name]
+    local azimuth = marker_info.azimuth
+    local range = marker_info.range
+    local vertical_distance = marker_info.vertical_distance
 
-    local radius = marker_info.range / self._settings.max_range * self._settings.radius
+    if camera_position and camera_forward then
+        azimuth, range, vertical_distance = self:_get_marker_azimuth_range(
+            marker_info.marker,
+            camera_position,
+            camera_forward
+        )
+    end
+
+    local radius = range / self._settings.max_range * self._settings.radius
     local is_out_of_range = radius > self._settings.radius
     if is_out_of_range then
         radius = self._settings.out_of_range_radius
     end
-    local x = radius * -math_sin(marker_info.azimuth)
-    local y = radius * -math_cos(marker_info.azimuth)
+    local x = radius * -math_sin(azimuth)
+    local y = radius * -math_cos(azimuth)
 
     local update_function = self._icon_update_functions_by_name[icon_name]
-    local ok = pcall(update_function, widget, marker_info.marker, x, y, marker_info.vertical_distance, marker_info.range, is_out_of_range)
+    local ok = pcall(update_function, widget, marker_info.marker, x, y, vertical_distance, range, is_out_of_range)
 
     if ok then
         UIWidget.draw(widget, ui_renderer)
@@ -542,6 +560,11 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
 
     self:_update_background_color()
 
+    local camera = self._parent:player_camera()
+    local camera_position = camera and ScriptCamera.position(camera) or nil
+    local camera_rotation = camera and ScriptCamera.rotation(camera) or nil
+    local camera_forward = camera_rotation and Quaternion.forward(camera_rotation) or nil
+
     local vfov = local_player and (Managers.state.camera:fov(local_player.viewport_name) or 1) or 1
     local hfov = get_hfov(vfov)
     local fov_indicator_style = self._widgets_by_name.fov_indicator.style
@@ -557,10 +580,9 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
             local center_y = pos[2] or 0
             local snapshot = nil
             local rotation = nil
-            local camera = self._parent:player_camera()
-            if camera then
-                snapshot = { player_position = ScriptCamera.position(camera) }
-                rotation = ScriptCamera.rotation(camera)
+            if camera_position then
+                snapshot = { player_position = camera_position }
+                rotation = camera_rotation
             elseif local_player and local_player.player_unit and Unit.alive(local_player.player_unit) then
                 snapshot = { player_position = Unit.world_position(local_player.player_unit, 1) }
                 rotation = Unit.local_rotation(local_player.player_unit, 1)
@@ -609,14 +631,13 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
 
     local t_now = Managers.time and Managers.time:time("main") or 0
     if t_now >= self._next_scan_t then
-        local scan_interval = mod.settings and mod.settings.enemy_radar_scan_interval or 0.10
-        self._next_scan_t = t_now + scan_interval
+        self._next_scan_t = t_now + 0.25
         self._cached_markers = self:_collect_markers()
     end
 
     local cached = self._cached_markers
     for i = 1, #cached do
-        self:_draw_widget_by_marker(cached[i], ui_renderer)
+        self:_draw_widget_by_marker(cached[i], ui_renderer, camera_position, camera_forward)
     end
 end
 

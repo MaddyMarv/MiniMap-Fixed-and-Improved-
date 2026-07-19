@@ -231,10 +231,7 @@ local loc = {
         en = "Scan Range (meters)",
         ["zh-cn"] = "扫描范围（米）",
     },
-    enemy_radar_scan_interval = {
-        en = "Scan Interval (seconds)",
-        ["zh-cn"] = "扫描间隔（秒）",
-    },
+
     enemy_radar_priority_mode = {
         en = "Priority Mode",
         ["zh-cn"] = "优先级模式",

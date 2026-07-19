@@ -317,13 +317,7 @@ return {
                         range = {5.0, 100.0},
                         decimals_number = 1,
                     },
-                    {
-                        setting_id = "enemy_radar_scan_interval",
-                        type = "numeric",
-                        default_value = 0.10,
-                        range = {0.01, 1.0},
-                        decimals_number = 2,
-                    },
+
                     {
                         setting_id = "enemy_radar_priority_mode",
                         type = "dropdown",

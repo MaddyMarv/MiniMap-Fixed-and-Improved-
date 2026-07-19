@@ -468,7 +468,7 @@ local function collect_settings()
 
     mod.settings.enemy_radar_enabled = mod:get("enemy_radar_enabled")
     mod.settings.enemy_radar_scan_range = mod:get("enemy_radar_scan_range") or 50.0
-    mod.settings.enemy_radar_scan_interval = mod:get("enemy_radar_scan_interval") or 0.10
+
 
     mod.settings.enemy_radar_filters = {
         disabler = mod:get("enemy_radar_filter_disabler"),
