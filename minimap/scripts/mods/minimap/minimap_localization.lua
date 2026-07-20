@@ -792,45 +792,78 @@ local loc = {
         en = "Floor Colors & Opacities",
         ["zh-cn"] = "楼层颜色和不透明度",
     },
-    strike_map_floor_above = {
-        en = "Floor Above",
-        ["zh-cn"] = "上一层",
-    },
-    color_strike_map_floor_above = {
-        en = "Color (Above)",
-    },
-    color_strike_map_floor_above_r = { en = "Red" },
-    color_strike_map_floor_above_g = { en = "Green" },
-    color_strike_map_floor_above_b = { en = "Blue" },
-    color_strike_map_floor_above_opacity = {
-        en = "Opacity (Above)",
-    },
-    strike_map_floor_current = {
-        en = "Current Floor",
-        ["zh-cn"] = "当前层",
-    },
-    color_strike_map_floor_current = {
-        en = "Color (Current)",
-    },
-    color_strike_map_floor_current_r = { en = "Red" },
-    color_strike_map_floor_current_g = { en = "Green" },
-    color_strike_map_floor_current_b = { en = "Blue" },
-    color_strike_map_floor_current_opacity = {
-        en = "Opacity (Current)",
-    },
-    strike_map_floor_below = {
-        en = "Floor Below",
-        ["zh-cn"] = "下一层",
-    },
-    color_strike_map_floor_below = {
-        en = "Color (Below)",
-    },
-    color_strike_map_floor_below_r = { en = "Red" },
-    color_strike_map_floor_below_g = { en = "Green" },
-    color_strike_map_floor_below_b = { en = "Blue" },
-    color_strike_map_floor_below_opacity = {
-        en = "Opacity (Below)",
-    },
+strike_map_floor_above = {
+    en = "Floor Above",
+    ["zh-cn"] = "上一层",
+},
+color_strike_map_floor_above = {
+    en = "Color (Above)",
+    ["zh-cn"] = "上层楼层颜色",
+},
+color_strike_map_floor_above_r = {
+    en = "Red",
+    ["zh-cn"] = "红",
+},
+color_strike_map_floor_above_g = {
+    en = "Green",
+    ["zh-cn"] = "绿",
+},
+color_strike_map_floor_above_b = {
+    en = "Blue",
+    ["zh-cn"] = "蓝",
+},
+color_strike_map_floor_above_opacity = {
+    en = "Opacity (Above)",
+    ["zh-cn"] = "上层楼层透明度",
+},
+strike_map_floor_current = {
+    en = "Current Floor",
+    ["zh-cn"] = "当前层",
+},
+color_strike_map_floor_current = {
+    en = "Color (Current)",
+    ["zh-cn"] = "当前层颜色",
+},
+color_strike_map_floor_current_r = {
+    en = "Red",
+    ["zh-cn"] = "红",
+},
+color_strike_map_floor_current_g = {
+    en = "Green",
+    ["zh-cn"] = "绿",
+},
+color_strike_map_floor_current_b = {
+    en = "Blue",
+    ["zh-cn"] = "蓝",
+},
+color_strike_map_floor_current_opacity = {
+    en = "Opacity (Current)",
+    ["zh-cn"] = "当前层透明度",
+},
+strike_map_floor_below = {
+    en = "Floor Below",
+    ["zh-cn"] = "下一层",
+},
+color_strike_map_floor_below = {
+    en = "Color (Below)",
+    ["zh-cn"] = "下层楼层颜色",
+},
+color_strike_map_floor_below_r = {
+    en = "Red",
+    ["zh-cn"] = "红",
+},
+color_strike_map_floor_below_g = {
+    en = "Green",
+    ["zh-cn"] = "绿",
+},
+color_strike_map_floor_below_b = {
+    en = "Blue",
+    ["zh-cn"] = "蓝",
+},
+color_strike_map_floor_below_opacity = {
+    en = "Opacity (Below)",
+    ["zh-cn"] = "下层楼层透明度",
+},
 }
 
 for _, color_name in ipairs(Color.list) do
