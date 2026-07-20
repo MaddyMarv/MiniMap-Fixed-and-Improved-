@@ -656,6 +656,34 @@ return {
                 },
             },
             {
+                setting_id = "strike_map_lines",
+                type = "group",
+                tab = mod:localize("tab_strike_map"),
+                sub_widgets = {
+                    {
+                        setting_id = "strike_map_line_thickness_contours",
+                        type = "numeric",
+                        default_value = 0.85,
+                        range = {0.0, 10.0},
+                        decimals_number = 2,
+                    },
+                    {
+                        setting_id = "strike_map_line_thickness_stairs",
+                        type = "numeric",
+                        default_value = 1.4,
+                        range = {0.0, 10.0},
+                        decimals_number = 2,
+                    },
+                    {
+                        setting_id = "strike_map_line_thickness_slopes",
+                        type = "numeric",
+                        default_value = 0.8,
+                        range = {0.0, 10.0},
+                        decimals_number = 2,
+                    },
+                },
+            },
+            {
                 setting_id = "strike_map_floors",
                 type = "group",
                 tab = mod:localize("tab_strike_map"),

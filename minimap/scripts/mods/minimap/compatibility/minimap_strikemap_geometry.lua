@@ -52,6 +52,28 @@ local _grid = {
     draw_cap_logged = false,
 }
 
+local _vector_grid = {
+    context = nil,
+    contours = nil,
+    contour_count = 0,
+    contours_cells = {},
+    contours_stamp = {},
+    stairs = nil,
+    stair_count = 0,
+    stairs_cells = {},
+    stairs_stamp = {},
+    slopes = nil,
+    slope_count = 0,
+    slopes_cells = {},
+    slopes_stamp = {},
+    frame_id = 0,
+    inverse_grid_cell = 1 / 16,
+    min_cx = 0,
+    max_cx = -1,
+    min_cy = 0,
+    max_cy = -1,
+}
+
 local function _reset_grid()
     _grid.context = nil
     _grid.triangles = nil
@@ -65,6 +87,25 @@ local function _reset_grid()
     _grid.min_cy = 0
     _grid.max_cy = -1
     _grid.draw_cap_logged = false
+
+    _vector_grid.context = nil
+    _vector_grid.contours = nil
+    _vector_grid.contour_count = 0
+    _vector_grid.contours_cells = {}
+    _vector_grid.contours_stamp = {}
+    _vector_grid.stairs = nil
+    _vector_grid.stair_count = 0
+    _vector_grid.stairs_cells = {}
+    _vector_grid.stairs_stamp = {}
+    _vector_grid.slopes = nil
+    _vector_grid.slope_count = 0
+    _vector_grid.slopes_cells = {}
+    _vector_grid.slopes_stamp = {}
+    _vector_grid.frame_id = 0
+    _vector_grid.min_cx = 0
+    _vector_grid.max_cx = -1
+    _vector_grid.min_cy = 0
+    _vector_grid.max_cy = -1
 end
 
 mod._strikemap_geometry_renderer_reset = _reset_grid
@@ -201,6 +242,104 @@ local function _ensure_grid(context)
     end
 end
 
+local function _hash_segments(segments, stride, count, grid_cell, cells, stamp, grid_extents)
+    if count == 0 or not segments then return end
+    local inv_cell = 1 / grid_cell
+    for i = 1, count do
+        stamp[i] = 0
+        local base = (i - 1) * stride
+        local x1 = segments[base + 1]
+        local y1 = segments[base + 2]
+        local x2 = segments[base + 3]
+        local y2 = segments[base + 4]
+
+        local cx1 = math_floor(math_min(x1, x2) * inv_cell)
+        local cx2 = math_floor(math_max(x1, x2) * inv_cell)
+        local cy1 = math_floor(math_min(y1, y2) * inv_cell)
+        local cy2 = math_floor(math_max(y1, y2) * inv_cell)
+
+        for cx = cx1, cx2 do
+            for cy = cy1, cy2 do
+                local row_key = (cx + GRID_CELL_HASH_OFFSET) * GRID_CELL_HASH_STRIDE
+                local key = row_key + cy + GRID_CELL_HASH_OFFSET
+                local bucket = cells[key]
+                if not bucket then
+                    bucket = {}
+                    cells[key] = bucket
+                end
+                bucket[#bucket + 1] = i
+                
+                if cx < grid_extents[1] then grid_extents[1] = cx end
+                if cx > grid_extents[2] then grid_extents[2] = cx end
+                if cy < grid_extents[3] then grid_extents[3] = cy end
+                if cy > grid_extents[4] then grid_extents[4] = cy end
+            end
+        end
+    end
+end
+
+local function _build_vector_grid(vector_context, grid_cell)
+    local cells_c, stamp_c = {}, {}
+    local cells_st, stamp_st = {}, {}
+    local cells_sl, stamp_sl = {}, {}
+    local extents = { math_huge, -math_huge, math_huge, -math_huge }
+
+    local contours = vector_context.contours
+    local contour_count = vector_context.contour_count or 0
+    local contour_stride = vector_context.contour_stride or 5
+    _hash_segments(contours, contour_stride, contour_count, grid_cell, cells_c, stamp_c, extents)
+
+    local stairs = vector_context.stairs
+    local stair_count = vector_context.stair_count or 0
+    local stair_stride = vector_context.stair_stride or 6
+    _hash_segments(stairs, stair_stride, stair_count, grid_cell, cells_st, stamp_st, extents)
+
+    local slopes = vector_context.slopes
+    local slope_count = vector_context.slope_count or 0
+    local slope_stride = vector_context.slope_stride or 5
+    _hash_segments(slopes, slope_stride, slope_count, grid_cell, cells_sl, stamp_sl, extents)
+
+    _vector_grid.context = vector_context
+    _vector_grid.contours = contours
+    _vector_grid.contour_count = contour_count
+    _vector_grid.contour_stride = contour_stride
+    _vector_grid.contours_cells = cells_c
+    _vector_grid.contours_stamp = stamp_c
+
+    _vector_grid.stairs = stairs
+    _vector_grid.stair_count = stair_count
+    _vector_grid.stair_stride = stair_stride
+    _vector_grid.stairs_cells = cells_st
+    _vector_grid.stairs_stamp = stamp_st
+
+    _vector_grid.slopes = slopes
+    _vector_grid.slope_count = slope_count
+    _vector_grid.slope_stride = slope_stride
+    _vector_grid.slopes_cells = cells_sl
+    _vector_grid.slopes_stamp = stamp_sl
+    
+    _vector_grid.frame_id = 0
+    _vector_grid.inverse_grid_cell = 1 / grid_cell
+    
+    if extents[1] ~= math_huge then
+        _vector_grid.min_cx = extents[1]
+        _vector_grid.max_cx = extents[2]
+        _vector_grid.min_cy = extents[3]
+        _vector_grid.max_cy = extents[4]
+    else
+        _vector_grid.min_cx = 0
+        _vector_grid.max_cx = -1
+        _vector_grid.min_cy = 0
+        _vector_grid.max_cy = -1
+    end
+end
+
+local function _ensure_vector_grid(vector_context, grid_cell)
+    if _vector_grid.context ~= vector_context then
+        _build_vector_grid(vector_context, grid_cell)
+    end
+end
+
 local _poly_ax, _poly_ay = {}, {}
 local _poly_bx, _poly_by = {}, {}
 
@@ -316,6 +455,76 @@ local function _submit_triangle(gui, sx1, sy1, sx2, sy2, sx3, sy3, layer, color)
         layer,
         color
     )
+end
+
+local function _draw_triangle_clipped(gui, scale, screen_center_x, screen_center_y, px1, py1, px2, py2, px3, py3, limit, limit_sq, is_circle, layer, color)
+    local draws = 0
+    if not ((px1 > limit and px2 > limit and px3 > limit)
+            or (px1 < -limit and px2 < -limit and px3 < -limit)
+            or (py1 > limit and py2 > limit and py3 > limit)
+            or (py1 < -limit and py2 < -limit and py3 < -limit)) then
+        if is_circle then
+            if px1 * px1 + py1 * py1 <= limit_sq
+                and px2 * px2 + py2 * py2 <= limit_sq
+                and px3 * px3 + py3 * py3 <= limit_sq then
+                _submit_triangle(gui,
+                    screen_center_x + px1 * scale, screen_center_y + py1 * scale,
+                    screen_center_x + px2 * scale, screen_center_y + py2 * scale,
+                    screen_center_x + px3 * scale, screen_center_y + py3 * scale,
+                    layer, color)
+                draws = draws + 1
+            else
+                local clip_count, res_x, res_y = _clip_triangle_to_circle(px1, py1, px2, py2, px3, py3, limit * 0.99)
+                if clip_count >= 3 then
+                    local fx = screen_center_x + res_x[1] * scale
+                    local fy = screen_center_y + res_y[1] * scale
+                    for k = 2, clip_count - 1 do
+                        _submit_triangle(gui, fx, fy,
+                            screen_center_x + res_x[k] * scale, screen_center_y + res_y[k] * scale,
+                            screen_center_x + res_x[k + 1] * scale, screen_center_y + res_y[k + 1] * scale,
+                            layer, color)
+                        draws = draws + 1
+                    end
+                end
+            end
+        elseif px1 >= -limit and px1 <= limit and py1 >= -limit and py1 <= limit
+            and px2 >= -limit and px2 <= limit and py2 >= -limit and py2 <= limit
+            and px3 >= -limit and px3 <= limit and py3 >= -limit and py3 <= limit then
+            _submit_triangle(gui,
+                screen_center_x + px1 * scale, screen_center_y + py1 * scale,
+                screen_center_x + px2 * scale, screen_center_y + py2 * scale,
+                screen_center_x + px3 * scale, screen_center_y + py3 * scale,
+                layer, color)
+            draws = draws + 1
+        else
+            local clip_count, res_x, res_y = _clip_triangle_to_square(px1, py1, px2, py2, px3, py3, limit)
+            if clip_count >= 3 then
+                local fx = screen_center_x + res_x[1] * scale
+                local fy = screen_center_y + res_y[1] * scale
+                for k = 2, clip_count - 1 do
+                    _submit_triangle(gui, fx, fy,
+                        screen_center_x + res_x[k] * scale, screen_center_y + res_y[k] * scale,
+                        screen_center_x + res_x[k + 1] * scale,
+                        screen_center_y + res_y[k + 1] * scale,
+                        layer, color)
+                    draws = draws + 1
+                end
+            end
+        end
+    end
+    return draws
+end
+
+local function _draw_line(gui, scale, screen_center_x, screen_center_y, px1, py1, px2, py2, limit, limit_sq, is_circle, thickness, layer, color)
+    local dx, dy = px2 - px1, py2 - py1
+    local len = math_sqrt(dx * dx + dy * dy)
+    if len <= 0.001 then return 0 end
+    local nx = -dy / len * thickness * 0.5
+    local ny = dx / len * thickness * 0.5
+    local draws = 0
+    draws = draws + _draw_triangle_clipped(gui, scale, screen_center_x, screen_center_y, px1 + nx, py1 + ny, px2 + nx, py2 + ny, px2 - nx, py2 - ny, limit, limit_sq, is_circle, layer, color)
+    draws = draws + _draw_triangle_clipped(gui, scale, screen_center_x, screen_center_y, px1 + nx, py1 + ny, px2 - nx, py2 - ny, px1 - nx, py1 - ny, limit, limit_sq, is_circle, layer, color)
+    return draws
 end
 
 local function _band_color(prefix, fallback)
@@ -444,90 +653,120 @@ local function _draw_geometry(ui_renderer, context, player_pos, rotation, center
                             py3 = -dy * radar_scale
                         end
 
-                        if not ((px1 > limit and px2 > limit and px3 > limit)
-                                or (px1 < -limit and px2 < -limit and px3 < -limit)
-                                or (py1 > limit and py2 > limit and py3 > limit)
-                                or (py1 < -limit and py2 < -limit and py3 < -limit)) then
-                            local dz = triangles[base + 7] - ppz
-                            local color = nil
+                        local dz = triangles[base + 7] - ppz
+                        local color = nil
 
-                            if dz <= range_above and dz >= -range_below then
-                                if dz > current_floor_half_height then
-                                    color = above_color
-                                elseif dz < -current_floor_half_height then
-                                    color = below_color
-                                else
-                                    color = current_color
-                                end
+                        if dz <= range_above and dz >= -range_below then
+                            if dz > current_floor_half_height then
+                                color = above_color
+                            elseif dz < -current_floor_half_height then
+                                color = below_color
+                            else
+                                color = current_color
                             end
+                        end
 
-                            if color then
-                                if is_circle then
-                                    if px1 * px1 + py1 * py1 <= limit_sq
-                                        and px2 * px2 + py2 * py2 <= limit_sq
-                                        and px3 * px3 + py3 * py3 <= limit_sq then
-                                        _submit_triangle(gui,
-                                            screen_center_x + px1 * scale, screen_center_y + py1 * scale,
-                                            screen_center_x + px2 * scale, screen_center_y + py2 * scale,
-                                            screen_center_x + px3 * scale, screen_center_y + py3 * scale,
-                                            layer, color)
-                                        draws = draws + 1
-                                    else
-                                        local clip_count, res_x, res_y = _clip_triangle_to_circle(px1, py1, px2, py2, px3, py3, limit * 0.99)
-                                        if clip_count >= 3 then
-                                            local fx = screen_center_x + res_x[1] * scale
-                                            local fy = screen_center_y + res_y[1] * scale
-                                            for k = 2, clip_count - 1 do
-                                                _submit_triangle(gui, fx, fy,
-                                                    screen_center_x + res_x[k] * scale, screen_center_y + res_y[k] * scale,
-                                                    screen_center_x + res_x[k + 1] * scale, screen_center_y + res_y[k + 1] * scale,
-                                                    layer, color)
-                                                draws = draws + 1
-                                            end
-                                        end
-                                    end
-                                elseif px1 >= -limit and px1 <= limit and py1 >= -limit and py1 <= limit
-                                    and px2 >= -limit and px2 <= limit and py2 >= -limit and py2 <= limit
-                                    and px3 >= -limit and px3 <= limit and py3 >= -limit and py3 <= limit then
-                                    _submit_triangle(gui,
-                                        screen_center_x + px1 * scale, screen_center_y + py1 * scale,
-                                        screen_center_x + px2 * scale, screen_center_y + py2 * scale,
-                                        screen_center_x + px3 * scale, screen_center_y + py3 * scale,
-                                        layer, color)
-                                    draws = draws + 1
+                        if color then
+                            draws = draws + _draw_triangle_clipped(gui, scale, screen_center_x, screen_center_y, px1, py1, px2, py2, px3, py3, limit, limit_sq, is_circle, layer, color)
+
+                            if draws >= MAX_TRIANGLE_DRAWS_PER_FRAME then
+                                if not _grid.draw_cap_logged and mod:get("debug_mode") == true then
+                                    _grid.draw_cap_logged = true
+                                    mod:info(string_format(
+                                        "[minimap] Strikemap geometry draw cap reached | cap=%d",
+                                        MAX_TRIANGLE_DRAWS_PER_FRAME))
+                                end
+
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    local vector_context = StrikemapCompatibility:get_vector_context()
+    if vector_context then
+        _ensure_vector_grid(vector_context, context.grid_cell)
+        local frame_id_v = _vector_grid.frame_id + 1
+        _vector_grid.frame_id = frame_id_v
+
+        local min_cx_v = math_max(math_floor((ppx - cull_range) * _vector_grid.inverse_grid_cell), _vector_grid.min_cx)
+        local max_cx_v = math_min(math_floor((ppx + cull_range) * _vector_grid.inverse_grid_cell), _vector_grid.max_cx)
+        local min_cy_v = math_max(math_floor((ppy - cull_range) * _vector_grid.inverse_grid_cell), _vector_grid.min_cy)
+        local max_cy_v = math_min(math_floor((ppy + cull_range) * _vector_grid.inverse_grid_cell), _vector_grid.max_cy)
+
+        local line_layer = layer + 1
+
+        local thickness_contours = mod:get("strike_map_line_thickness_contours") or 2.5
+        local thickness_stairs = mod:get("strike_map_line_thickness_stairs") or 1.5
+        local thickness_slopes = mod:get("strike_map_line_thickness_slopes") or 1.5
+
+        local function draw_vector_layer(segments, stride, cells, stamp, thickness)
+            for cx = min_cx_v, max_cx_v do
+                local row_key = (cx + GRID_CELL_HASH_OFFSET) * GRID_CELL_HASH_STRIDE
+                for cy = min_cy_v, max_cy_v do
+                    local bucket = cells[row_key + cy + GRID_CELL_HASH_OFFSET]
+                    if bucket then
+                        for bucket_index = 1, #bucket do
+                            local i = bucket[bucket_index]
+                            if stamp[i] ~= frame_id_v then
+                                stamp[i] = frame_id_v
+                                local base = (i - 1) * stride
+                                local dx1 = segments[base + 1] - ppx
+                                local dy1 = segments[base + 2] - ppy
+                                local dx2 = segments[base + 3] - ppx
+                                local dy2 = segments[base + 4] - ppy
+
+                                local px1, py1, px2, py2
+                                if right_x then
+                                    px1 = (dx1 * right_x + dy1 * right_y) * radar_scale
+                                    py1 = -(dx1 * forward_x + dy1 * forward_y) * radar_scale
+                                    px2 = (dx2 * right_x + dy2 * right_y) * radar_scale
+                                    py2 = -(dx2 * forward_x + dy2 * forward_y) * radar_scale
                                 else
-                                    local clip_count, res_x, res_y = _clip_triangle_to_square(px1, py1, px2, py2, px3, py3, limit)
+                                    px1 = dx1 * radar_scale
+                                    py1 = -dy1 * radar_scale
+                                    px2 = dx2 * radar_scale
+                                    py2 = -dy2 * radar_scale
+                                end
 
-                                    if clip_count >= 3 then
-                                        local fx = screen_center_x + res_x[1] * scale
-                                        local fy = screen_center_y + res_y[1] * scale
-
-                                        for k = 2, clip_count - 1 do
-                                            _submit_triangle(gui, fx, fy,
-                                                screen_center_x + res_x[k] * scale, screen_center_y + res_y[k] * scale,
-                                                screen_center_x + res_x[k + 1] * scale,
-                                                screen_center_y + res_y[k + 1] * scale,
-                                                layer, color)
-                                            draws = draws + 1
-                                        end
+                                local dz = segments[base + 5] - ppz
+                                local color = nil
+                                
+                                if dz <= range_above and dz >= -range_below then
+                                    if dz > current_floor_half_height then
+                                        color = above_color
+                                    elseif dz < -current_floor_half_height then
+                                        color = below_color
+                                    else
+                                        color = current_color
                                     end
                                 end
 
-                                if draws >= MAX_TRIANGLE_DRAWS_PER_FRAME then
-                                    if not _grid.draw_cap_logged and mod:get("debug_mode") == true then
-                                        _grid.draw_cap_logged = true
-                                        mod:info(string_format(
-                                            "[minimap] Strikemap geometry draw cap reached | cap=%d",
-                                            MAX_TRIANGLE_DRAWS_PER_FRAME))
+                                if color then
+                                    draws = draws + _draw_line(gui, scale, screen_center_x, screen_center_y, px1, py1, px2, py2, limit, limit_sq, is_circle, thickness, line_layer, color)
+                                    if draws >= MAX_TRIANGLE_DRAWS_PER_FRAME then
+                                        return true
                                     end
-
-                                    return
                                 end
                             end
                         end
                     end
                 end
             end
+            return false
+        end
+
+        if _vector_grid.contours then
+            if draw_vector_layer(_vector_grid.contours, _vector_grid.contour_stride, _vector_grid.contours_cells, _vector_grid.contours_stamp, thickness_contours) then return end
+        end
+        if _vector_grid.stairs then
+            if draw_vector_layer(_vector_grid.stairs, _vector_grid.stair_stride, _vector_grid.stairs_cells, _vector_grid.stairs_stamp, thickness_stairs) then return end
+        end
+        if _vector_grid.slopes then
+            if draw_vector_layer(_vector_grid.slopes, _vector_grid.slope_stride, _vector_grid.slopes_cells, _vector_grid.slopes_stamp, thickness_slopes) then return end
         end
     end
 end

@@ -37,6 +37,7 @@ local StrikemapCompatibility = {
     _context = nil,
     _context_revision = nil,
     _api = nil,
+    _vector_context = nil,
     _consumer_registered = false,
     _next_attempt_t = 0,
     _next_refresh_t = 0,
@@ -299,6 +300,7 @@ function StrikemapCompatibility:_refresh(now)
 
     if not ok_context then
         self._context = nil
+        self._vector_context = nil
         self:_set_status("error", tostring(context))
 
         return nil
@@ -306,6 +308,7 @@ function StrikemapCompatibility:_refresh(now)
 
     if context == nil then
         self._context = nil
+        self._vector_context = nil
         self._next_attempt_t = now + RETRY_MAP_UNAVAILABLE_INTERVAL
         self:_set_status("map_unavailable")
 
@@ -316,6 +319,7 @@ function StrikemapCompatibility:_refresh(now)
 
     if not valid_context then
         self._context = nil
+        self._vector_context = nil
 
         if failure == "map_unavailable" then
             self._next_attempt_t = now + RETRY_MAP_UNAVAILABLE_INTERVAL
@@ -334,6 +338,17 @@ function StrikemapCompatibility:_refresh(now)
     self._context_revision = valid_context.revision
     self._next_refresh_t = now + CONTEXT_REFRESH_INTERVAL
     self:_set_status("active", tostring(valid_context.map_id or valid_context.mission_name))
+
+    if type(api.get_vector_context) == "function" then
+        local ok_v, v_context = pcall(api.get_vector_context)
+        if ok_v and type(v_context) == "table" then
+            self._vector_context = v_context
+        else
+            self._vector_context = nil
+        end
+    else
+        self._vector_context = nil
+    end
 
     return valid_context
 end
@@ -365,18 +380,26 @@ function StrikemapCompatibility:get_map_context(t)
     return self:_refresh(now)
 end
 
+function StrikemapCompatibility:get_vector_context(t)
+    self:get_map_context(t)
+    return self._vector_context
+end
+
 function StrikemapCompatibility:mark_error(err)
     self._context = nil
+    self._vector_context = nil
     self:_set_status("error", tostring(err))
 end
 
 function StrikemapCompatibility:mark_unsupported(reason)
     self._context = nil
+    self._vector_context = nil
     self:_set_status("incompatible", tostring(reason))
 end
 
 function StrikemapCompatibility:reset(status)
     self._context = nil
+    self._vector_context = nil
     self._context_revision = nil
     self._next_attempt_t = 0
     self._next_refresh_t = 0

@@ -772,6 +772,22 @@ local loc = {
         en = "Depth / Z-Offset",
         ["zh-cn"] = "深度/Z轴偏移",
     },
+    strike_map_lines = {
+        en = "Line Thicknesses",
+        ["zh-cn"] = "线宽",
+    },
+    strike_map_line_thickness_contours = {
+        en = "Contours (Walls & Ledges)",
+        ["zh-cn"] = "轮廓线（墙壁与边缘）",
+    },
+    strike_map_line_thickness_stairs = {
+        en = "Stairs (Stair Ticks)",
+        ["zh-cn"] = "楼梯（楼梯刻度）",
+    },
+    strike_map_line_thickness_slopes = {
+        en = "Slopes (Incline Ink)",
+        ["zh-cn"] = "斜坡（斜坡墨迹）",
+    },
     strike_map_floors = {
         en = "Floor Colors & Opacities",
         ["zh-cn"] = "楼层颜色和不透明度",
