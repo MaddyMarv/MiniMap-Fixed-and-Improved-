@@ -174,6 +174,10 @@ local loc = {
         en = "Hide bots",
         ["zh-cn"] = "隐藏机器人队友",
     },
+    teammate_facing_arrows = {
+        en = "Teammate Facing Arrows",
+        ["zh-cn"] = "队友朝向指示箭头",
+    },
     dog_icon_style = {
         en = "Dog Icon Style",
         ["zh-cn"] = "猎犬图标样式",
