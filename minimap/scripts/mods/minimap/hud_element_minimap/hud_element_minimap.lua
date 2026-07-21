@@ -420,7 +420,7 @@ HudElementMinimap._get_marker_azimuth_range = function(self, marker, camera_posi
         end
 
         local diff_vector = marker_position - camera_position
-        local vertical_distance = math_abs(diff_vector.z)
+        local vertical_distance = diff_vector.z
         diff_vector.z = 0
         local azimuth = Vector3.flat_angle(camera_forward, diff_vector)
         local range = Vector3.length(diff_vector)

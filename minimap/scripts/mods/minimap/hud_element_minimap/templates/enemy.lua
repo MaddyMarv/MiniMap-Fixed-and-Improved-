@@ -84,11 +84,11 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
 
     local settings = minimap_mod and minimap_mod.settings or {}
     local vertical_distance_enabled = settings.enemy_radar_vertical_distance_enabled
-    local vertical_distance_threshold = settings.enemy_radar_vertical_distance_threshold or 3.0
-    local vertical_distance_transparency = settings.enemy_radar_vertical_distance_transparency or 40
+    local vertical_distance_threshold = settings.enemy_radar_vertical_distance_threshold or 2.5
+    local vertical_distance_transparency = settings.enemy_radar_vertical_distance_transparency or 180
 
     local alpha = 255
-    if vertical_distance_enabled and vertical_distance and vertical_distance > vertical_distance_threshold then
+    if vertical_distance_enabled and vertical_distance and math.abs(vertical_distance) > vertical_distance_threshold then
         alpha = vertical_distance_transparency
     end
 
@@ -152,9 +152,17 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     distance_text_style.visible = false
 
     local texts = {}
+
+    local vertical_str = ""
     if should_show_distance then
         local distance_m = math.floor(range * 10) / 10
-        texts[#texts+1] = string.format("%.1fm", distance_m)
+        local distance_str = string.format("%.1fm", distance_m)
+        if vertical_str ~= "" then
+            distance_str = vertical_str .. " " .. distance_str
+        end
+        texts[#texts+1] = distance_str
+    elseif vertical_str ~= "" and icon_visible then
+        texts[#texts+1] = vertical_str
     end
     if should_show_name and marker.unit then
         if minimap_mod and minimap_mod.get_enemy_display_name then

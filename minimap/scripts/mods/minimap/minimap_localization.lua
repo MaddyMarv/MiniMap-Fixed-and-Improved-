@@ -11,12 +11,15 @@ local loc = {
     },
     tab_general = {
         en = "General",
+        ["zh-cn"] = "通用设置",
     },
     tab_icons = {
         en = "Icons & Markers",
+        ["zh-cn"] = "图标与标记",
     },
     tab_enemy_radar = {
         en = "Enemy Radar",
+        ["zh-cn"] = "敌人雷达", 
     },
     tab_strike_map = {
         en = "Strike Map",
@@ -278,25 +281,31 @@ local loc = {
     },
     enemy_radar_filter_disabler = {
         en = "Disablers (Hound/Mutant/Netter)",
+        ["zh-cn"] = "控制专家（猎犬/变种人/）",
     },
     enemy_radar_filter_sniper = {
         en = "Snipers",
+        ["zh-cn"] = "狙击手",
     },
     enemy_radar_filter_special = {
         en = "Other Specials",
+        ["zh-cn"] = "其余专家",
     },
     enemy_radar_filter_shield = {
         en = "Shields (Vanguards)",
+        ["zh-cn"] = "盾兵（先锋）",
     },
     enemy_radar_filter_ranged_elite = {
         en = "Ranged Elites",
+        ["zh-cn"] = "远程精英",
     },
     enemy_radar_filter_melee_elite = {
         en = "Melee Elites",
+        ["zh-cn"] = "近战精英",
     },
     enemy_radar_filter_boss = {
         en = "Boss/Monstrosity",
-        ["zh-cn"] = "头目",
+        ["zh-cn"] = "首领/怪兽",
     },
     enemy_radar_filter_horde = {
         en = "Horde",
@@ -308,21 +317,27 @@ local loc = {
     },
     enemy_radar_limit_disabler = {
         en = "Disabler Limit",
+        ["zh-cn"] = "控制专家上限",
     },
     enemy_radar_limit_sniper = {
         en = "Sniper Limit",
+        ["zh-cn"] = "狙击手上限",
     },
     enemy_radar_limit_special = {
         en = "Other Specials Limit",
+        ["zh-cn"] = "其余专家上限",
     },
     enemy_radar_limit_shield = {
         en = "Shield Limit",
+        ["zh-cn"] = "盾兵上限",
     },
     enemy_radar_limit_ranged_elite = {
         en = "Ranged Elite Limit",
+        ["zh-cn"] = "远程精英上限",
     },
     enemy_radar_limit_melee_elite = {
         en = "Melee Elite Limit",
+        ["zh-cn"] = "近战精英上限",
     },
     enemy_radar_limit_boss = {
         en = "Boss Limit",
@@ -594,75 +609,99 @@ local loc = {
     },
     color_boss = {
         en = "Boss / Monstrosity",
+        ["zh-cn"] = "首领/怪物",
     },
     color_boss_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_boss_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_boss_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_disabler = {
         en = "Disabler",
+        ["zh-cn"] = "控制专家",
     },
     color_disabler_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_disabler_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_disabler_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_sniper = {
         en = "Sniper",
+        ["zh-cn"] = "狙击手",
     },
     color_sniper_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_sniper_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_sniper_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_shield = {
         en = "Shield",
+        ["zh-cn"] = "盾兵",
     },
     color_shield_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_shield_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_shield_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_ranged_elite = {
         en = "Ranged Elite",
+        ["zh-cn"] = "远程精英",
     },
     color_ranged_elite_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_ranged_elite_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_ranged_elite_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_melee_elite = {
         en = "Melee Elite",
+        ["zh-cn"] = "近战精英",
     },
     color_melee_elite_r = {
         en = "Red",
+        ["zh-cn"] = "红",
     },
     color_melee_elite_g = {
         en = "Green",
+        ["zh-cn"] = "绿",
     },
     color_melee_elite_b = {
         en = "Blue",
+        ["zh-cn"] = "蓝",
     },
     color_horde = {
         en = "Horde",
@@ -696,22 +735,6 @@ local loc = {
         en = "Blue",
         ["zh-cn"] = "蓝",
     },
-    enemy_radar_vertical_distance = {
-        en = "Vertical Distance Transparency",
-        ["zh-cn"] = "垂直距离透明度",
-    },
-    enemy_radar_vertical_distance_enabled = {
-        en = "Enable Vertical Distance Transparency",
-        ["zh-cn"] = "启用垂直距离透明度",
-    },
-    enemy_radar_vertical_distance_threshold = {
-        en = "Vertical Distance Threshold (meters)",
-        ["zh-cn"] = "垂直距离阈值（米）",
-    },
-    enemy_radar_vertical_distance_transparency = {
-        en = "Transparency Alpha (0-255)",
-        ["zh-cn"] = "透明度Alpha值（0-255）",
-    },
     distance_markers = {
         en = "Distance Markers",
         ["zh-cn"] = "距离标记",
@@ -743,6 +766,63 @@ local loc = {
     distance_marker_only_out_of_range = {
         en = "Only Show Distance When Out of Range",
         ["zh-cn"] = "仅当超出范围时显示距离",
+    },
+
+    enemy_radar_vertical_distance = {
+        en = "Vertical Distance Transparency",
+        ["zh-cn"] = "高低差透明度衰减",
+    },
+    enemy_radar_vertical_distance_enabled = {
+        en = "Enable Vertical Distance Transparency",
+        ["zh-cn"] = "开启高低差透明度衰减",
+    },
+    enemy_radar_vertical_distance_threshold = {
+        en = "Vertical Distance Threshold (meters)",
+        ["zh-cn"] = "高低差判定阈值（米）",
+    },
+    enemy_radar_vertical_distance_transparency = {
+        en = "Transparency Alpha (0-255)",
+        ["zh-cn"] = "衰减后透明度数值(0-255)",
+    },
+    distance_marker_vertical_symbols = {
+        en = "Show Vertical Symbols (↑/↓)",
+        ["zh-cn"] = "显示高低指示箭头(↑/↓)",
+    },
+    distance_marker_vertical_distance = {
+        en = "Vertical Distance Symbols",
+        ["zh-cn"] = "高低差箭头标记",
+    },
+    distance_marker_vertical_threshold = {
+        en = "Vertical Distance Threshold (meters)",
+        ["zh-cn"] = "箭头显示高低差阈值（米）",
+    },
+    distance_marker_vertical_transparency = {
+        en = "Vertical Distance Transparency (0-255)",
+        ["zh-cn"] = "高低箭头透明度(0-255)",
+    },
+    distance_marker_vertical_arrow_color_r = {
+        en = "Arrow Color (Red)",
+        ["zh-cn"] = "箭头（红）",
+    },
+    distance_marker_vertical_arrow_color_g = {
+        en = "Arrow Color (Green)",
+        ["zh-cn"] = "箭头（绿）",
+    },
+    distance_marker_vertical_arrow_color_b = {
+        en = "Arrow Color (Blue)",
+        ["zh-cn"] = "箭头（蓝）",
+    },
+    distance_marker_vertical_arrow_color = {
+        en = "Vertical Arrow ARGB Color",
+        ["zh-cn"] = "高低箭头ARGB色彩",
+    },
+    distance_marker_vertical_arrow_size = {
+        en = "Vertical Arrow Size",
+        ["zh-cn"] = "高低箭头尺寸",
+    },
+    distance_marker_vertical_arrow_opacity = {
+        en = "Arrow Color (Alpha / Opacity)",
+        ["zh-cn"] = "箭头整体透明度",
     },
     display_names = {
         en = "Display Names",

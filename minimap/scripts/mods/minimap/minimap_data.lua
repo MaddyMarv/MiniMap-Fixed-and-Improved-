@@ -190,6 +190,11 @@ return {
                         type = "checkbox",
                         default_value = true,
                     },
+                    {
+                        setting_id = "teammate_facing_arrows",
+                        type = "checkbox",
+                        default_value = true,
+                    },
                 },
             },
             {
@@ -231,6 +236,66 @@ return {
                         setting_id = "distance_marker_only_out_of_range",
                         type = "checkbox",
                         default_value = false,
+                    },
+                    {
+                        setting_id = "distance_marker_vertical_distance",
+                        type = "group",
+                        sub_widgets = {
+                            {
+                                setting_id = "distance_marker_vertical_symbols",
+                                type = "checkbox",
+                                default_value = true,
+                            },
+                            {
+                                setting_id = "distance_marker_vertical_threshold",
+                                type = "numeric",
+                                default_value = 2.5,
+                                range = {0.5, 10.0},
+                                decimals_number = 1,
+                            },
+                            {
+                                setting_id = "distance_marker_vertical_transparency",
+                                type = "numeric",
+                                default_value = 180,
+                                range = {0, 255},
+                            },
+                            {
+                                setting_id = "distance_marker_vertical_arrow_size",
+                                type = "numeric",
+                                default_value = 20,
+                                range = {10, 40},
+                            },
+                            {
+                                setting_id = "distance_marker_vertical_arrow_color",
+                                type = "group",
+                                sub_widgets = {
+                                    {
+                                        setting_id = "distance_marker_vertical_arrow_color_r",
+                                        type = "numeric",
+                                        default_value = 255,
+                                        range = {0, 255},
+                                    },
+                                    {
+                                        setting_id = "distance_marker_vertical_arrow_color_g",
+                                        type = "numeric",
+                                        default_value = 255,
+                                        range = {0, 255},
+                                    },
+                                    {
+                                        setting_id = "distance_marker_vertical_arrow_color_b",
+                                        type = "numeric",
+                                        default_value = 255,
+                                        range = {0, 255},
+                                    },
+                                    {
+                                        setting_id = "distance_marker_vertical_arrow_opacity",
+                                        type = "numeric",
+                                        default_value = 255,
+                                        range = {0, 255},
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -369,14 +434,14 @@ return {
                             {
                                 setting_id = "enemy_radar_vertical_distance_threshold",
                                 type = "numeric",
-                                default_value = 3.0,
+                                default_value = 2.5,
                                 range = {0.5, 10.0},
                                 decimals_number = 1,
                             },
                             {
                                 setting_id = "enemy_radar_vertical_distance_transparency",
                                 type = "numeric",
-                                default_value = 40,
+                                default_value = 180,
                                 range = {0, 255},
                             },
                         },
