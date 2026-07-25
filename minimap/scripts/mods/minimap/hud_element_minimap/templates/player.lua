@@ -132,7 +132,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 vertical_arrow_overlay_style.visible = false
             end
         end
-        vertical_str = "" -- Prevent appending to distance text
+        vertical_str = ""
     end
 
     if should_show_distance then
