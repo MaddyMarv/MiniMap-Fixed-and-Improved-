@@ -1,0 +1,14 @@
+{
+    "name": "MiniMap",
+    "author": "IndicaBunny",
+    "version": "3.2",
+    "source": "https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-",
+    "kofi": "https://ko-fi.com/indicabunny",
+    "description": "Adds a functional and customizable minimap to your HUD.",
+    "order": {
+        "require": [],
+        "this_before": [],
+        "this_after": []
+    },
+    "localization": {}
+}
