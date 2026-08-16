@@ -30,46 +30,50 @@ local color_defaults = {
 }
 
 local function load_breed_colors_from_settings()
-	local function get_color(r_key, g_key, b_key, default_r, default_g, default_b)
+	local function get_color(key, default_r, default_g, default_b)
+        local c = mod:get(key)
+        if c then return c end
 		return {
-			mod:get(r_key) or default_r,
-			mod:get(g_key) or default_g,
-			mod:get(b_key) or default_b
+			255,
+			default_r,
+			default_g,
+			default_b
 		}
 	end
 
 	return {
-		boss = get_color("color_boss_r", "color_boss_g", "color_boss_b", 255, 0, 0),
-		disabler = get_color("color_disabler_r", "color_disabler_g", "color_disabler_b", 200, 0, 255),
-		sniper = get_color("color_sniper_r", "color_sniper_g", "color_sniper_b", 255, 0, 150),
-		shield = get_color("color_shield_r", "color_shield_g", "color_shield_b", 100, 150, 255),
-		ranged_elite = get_color("color_ranged_elite_r", "color_ranged_elite_g", "color_ranged_elite_b", 255, 100, 0),
-		melee_elite = get_color("color_melee_elite_r", "color_melee_elite_g", "color_melee_elite_b", 255, 165, 0),
-		special = get_color("color_special_r", "color_special_g", "color_special_b", 255, 0, 255),
-		horde = get_color("color_horde_r", "color_horde_g", "color_horde_b", 150, 150, 150),
-		roamer = get_color("color_roamer_r", "color_roamer_g", "color_roamer_b", 180, 180, 180),
-		default = { 255, 255, 255 },
+		boss = get_color("color_boss", 255, 0, 0),
+		disabler = get_color("color_disabler", 200, 0, 255),
+		sniper = get_color("color_sniper", 255, 0, 150),
+		shield = get_color("color_shield", 100, 150, 255),
+		ranged_elite = get_color("color_ranged_elite", 255, 100, 0),
+		melee_elite = get_color("color_melee_elite", 255, 165, 0),
+		special = get_color("color_special", 255, 0, 255),
+		horde = get_color("color_horde", 150, 150, 150),
+		roamer = get_color("color_roamer", 180, 180, 180),
+		default = { 255, 255, 255, 255 },
 
-		chaos_hound = get_color("color_chaos_hound_r", "color_chaos_hound_g", "color_chaos_hound_b", 180, 0, 255),
-		renegade_netgunner = get_color("color_renegade_netgunner_r", "color_renegade_netgunner_g", "color_renegade_netgunner_b", 180, 0, 255),
+		chaos_hound = get_color("color_chaos_hound", 180, 0, 255),
+		renegade_netgunner = get_color("color_renegade_netgunner", 180, 0, 255),
 
-		renegade_sniper = get_color("color_renegade_sniper_r", "color_renegade_sniper_g", "color_renegade_sniper_b", 255, 0, 150),
+		renegade_sniper = get_color("color_renegade_sniper", 255, 0, 150),
 
-		renegade_flamer = get_color("color_flamer_r", "color_flamer_g", "color_flamer_b", 100, 255, 100),
-		cultist_flamer = get_color("color_flamer_r", "color_flamer_g", "color_flamer_b", 100, 255, 100),
+		renegade_flamer = get_color("color_flamer", 100, 255, 100),
+		cultist_flamer = get_color("color_flamer", 100, 255, 100),
 
-		renegade_grenadier = get_color("color_grenadier_r", "color_grenadier_g", "color_grenadier_b", 100, 255, 100),
-		cultist_grenadier = get_color("color_grenadier_r", "color_grenadier_g", "color_grenadier_b", 100, 255, 100),
-		chaos_poxwalker_bomber = get_color("color_chaos_poxwalker_bomber_r", "color_chaos_poxwalker_bomber_g", "color_chaos_poxwalker_bomber_b", 100, 255, 100),
+		renegade_grenadier = get_color("color_grenadier", 100, 255, 100),
+		cultist_grenadier = get_color("color_grenadier", 100, 255, 100),
+		chaos_poxwalker_bomber = get_color("color_chaos_poxwalker_bomber", 100, 255, 100),
 
-		chaos_ogryn_executor = get_color("color_executor_r", "color_executor_g", "color_executor_b", 255, 220, 0),
-		renegade_executor = get_color("color_executor_r", "color_executor_g", "color_executor_b", 255, 220, 0),
-		renegade_berzerker = get_color("color_berzerker_r", "color_berzerker_g", "color_berzerker_b", 255, 220, 0),
-		cultist_berzerker = get_color("color_berzerker_r", "color_berzerker_g", "color_berzerker_b", 255, 220, 0),
-		renegade_plasma_gunner = get_color("color_renegade_plasma_gunner_r", "color_renegade_plasma_gunner_g", "color_renegade_plasma_gunner_b", 255, 120, 0),
-		chaos_ogryn_bulwark = get_color("color_chaos_ogryn_bulwark_r", "color_chaos_ogryn_bulwark_g", "color_chaos_ogryn_bulwark_b", 0, 200, 255),
+		chaos_ogryn_executor = get_color("color_executor", 255, 220, 0),
+		renegade_executor = get_color("color_executor", 255, 220, 0),
+		renegade_berzerker = get_color("color_berzerker", 255, 220, 0),
+		cultist_berzerker = get_color("color_berzerker", 255, 220, 0),
+		renegade_plasma_gunner = get_color("color_renegade_plasma_gunner", 255, 120, 0),
+		chaos_ogryn_bulwark = get_color("color_chaos_ogryn_bulwark", 0, 200, 255),
 	}
 end
+
 
 mod.fallback_breed_colors = load_breed_colors_from_settings()
 
@@ -461,9 +465,7 @@ local function collect_settings()
     mod.settings.show_in_hub = mod:get("show_in_hub")
     mod.settings.show_in_shooting_range = mod:get("show_in_shooting_range")
     mod.settings.show_when_dead = mod:get("show_when_dead")
-    mod.settings.minimap_background_color_r = mod:get("minimap_background_color_r") or 180
-    mod.settings.minimap_background_color_g = mod:get("minimap_background_color_g") or 180
-    mod.settings.minimap_background_color_b = mod:get("minimap_background_color_b") or 180
+    mod.settings.minimap_background_color = mod:get("minimap_background_color") or {255, 180, 180, 180}
     mod.settings.minimap_background_opacity = mod:get("minimap_background_opacity")
 
     mod.settings.enemy_radar_enabled = mod:get("enemy_radar_enabled")
@@ -502,9 +504,7 @@ local function collect_settings()
 
     mod.settings.enemy_radar_melee_ring_enabled = mod:get("enemy_radar_melee_ring_enabled")
     mod.settings.enemy_radar_melee_range = mod:get("enemy_radar_melee_range")
-    mod.settings.enemy_radar_melee_ring_color_r = mod:get("enemy_radar_melee_ring_color_r") or 180
-    mod.settings.enemy_radar_melee_ring_color_g = mod:get("enemy_radar_melee_ring_color_g") or 180
-    mod.settings.enemy_radar_melee_ring_color_b = mod:get("enemy_radar_melee_ring_color_b") or 180
+    mod.settings.enemy_radar_melee_ring_color = mod:get("enemy_radar_melee_ring_color") or {255, 255, 165, 0}
     mod.settings.enemy_radar_melee_ring_opacity = mod:get("enemy_radar_melee_ring_opacity")
 
     mod.settings.enemy_radar_vertical_distance_enabled = mod:get("enemy_radar_vertical_distance_enabled")
@@ -566,16 +566,12 @@ mod.on_setting_changed = function(setting_id)
         if preset_id == "default" then
             local defaults = color_defaults[base_setting]
             if defaults then
-                mod:set(base_setting .. "_r", defaults[1], false)
-                mod:set(base_setting .. "_g", defaults[2], false)
-                mod:set(base_setting .. "_b", defaults[3], false)
+                mod:set(base_setting, { 255, defaults[1], defaults[2], defaults[3] }, false)
             end
         else
             for _, p in ipairs(color_presets) do
                 if p.id == preset_id then
-                    mod:set(base_setting .. "_r", p.r, false)
-                    mod:set(base_setting .. "_g", p.g, false)
-                    mod:set(base_setting .. "_b", p.b, false)
+                    mod:set(base_setting, { 255, p.r, p.g, p.b }, false)
                     break
                 end
             end
@@ -587,13 +583,12 @@ mod.on_setting_changed = function(setting_id)
 
     collect_settings()
 
-    if string.find(setting_id, "^color_") and string.find(setting_id, "_[rgb]$") then
+    if string.find(setting_id, "^color_") then
         mod.fallback_breed_colors = load_breed_colors_from_settings()
         return
     end
 
-    if setting_id == "minimap_background_color_r" or setting_id == "minimap_background_color_g" or
-       setting_id == "minimap_background_color_b" or setting_id == "minimap_background_opacity" then
+    if setting_id == "minimap_background_color" or setting_id == "minimap_background_opacity" then
         local ui_manager = Managers.ui
         if ui_manager and ui_manager._hud and ui_manager._hud._elements then
             local minimap = get_hud_minimap_element(ui_manager._hud._elements)
@@ -601,10 +596,6 @@ mod.on_setting_changed = function(setting_id)
                 minimap:_update_background_color()
             end
         end
-        return
-    end
-
-    if string.find(setting_id, "_[rgb]$") then
         return
     end
 

@@ -12,28 +12,9 @@ table.sort(color_presets, function(a,b) return a.name < b.name end)
 local function create_color_group(setting_prefix, default_r, default_g, default_b)
     return {
         setting_id = setting_prefix,
-        type = "group",
-        sub_widgets = {
-
-            {
-                setting_id = setting_prefix .. "_r",
-                type = "numeric",
-                default_value = default_r,
-                range = {0, 255},
-            },
-            {
-                setting_id = setting_prefix .. "_g",
-                type = "numeric",
-                default_value = default_g,
-                range = {0, 255},
-            },
-            {
-                setting_id = setting_prefix .. "_b",
-                type = "numeric",
-                default_value = default_b,
-                range = {0, 255},
-            },
-        }
+        type = "color",
+        default_value = { 255, default_r, default_g, default_b },
+        title = setting_prefix,
     }
 end
 
@@ -91,22 +72,10 @@ return {
                     },
 
                     {
-                        setting_id = "minimap_background_color_r",
-                        type = "numeric",
-                        default_value = 180,
-                        range = {0, 255},
-                    },
-                    {
-                        setting_id = "minimap_background_color_g",
-                        type = "numeric",
-                        default_value = 180,
-                        range = {0, 255},
-                    },
-                    {
-                        setting_id = "minimap_background_color_b",
-                        type = "numeric",
-                        default_value = 180,
-                        range = {0, 255},
+                        setting_id = "minimap_background_color",
+                        type = "color",
+                        default_value = { 255, 180, 180, 180 },
+                        title = "minimap_background_color",
                     },
                     {
                         setting_id = "minimap_background_opacity",
@@ -267,33 +236,15 @@ return {
                             },
                             {
                                 setting_id = "distance_marker_vertical_arrow_color",
-                                type = "group",
-                                sub_widgets = {
-                                    {
-                                        setting_id = "distance_marker_vertical_arrow_color_r",
-                                        type = "numeric",
-                                        default_value = 255,
-                                        range = {0, 255},
-                                    },
-                                    {
-                                        setting_id = "distance_marker_vertical_arrow_color_g",
-                                        type = "numeric",
-                                        default_value = 255,
-                                        range = {0, 255},
-                                    },
-                                    {
-                                        setting_id = "distance_marker_vertical_arrow_color_b",
-                                        type = "numeric",
-                                        default_value = 255,
-                                        range = {0, 255},
-                                    },
-                                    {
-                                        setting_id = "distance_marker_vertical_arrow_opacity",
-                                        type = "numeric",
-                                        default_value = 255,
-                                        range = {0, 255},
-                                    },
-                                },
+                                type = "color",
+                                default_value = { 255, 255, 255, 255 },
+                                title = "distance_marker_vertical_arrow_color",
+                            },
+                            {
+                                setting_id = "distance_marker_vertical_arrow_opacity",
+                                type = "numeric",
+                                default_value = 255,
+                                range = {0, 255},
                             },
                         },
                     },
@@ -575,22 +526,10 @@ return {
                             },
 
                             {
-                                setting_id = "enemy_radar_melee_ring_color_r",
-                                type = "numeric",
-                                default_value = 180,
-                                range = {0, 255},
-                            },
-                            {
-                                setting_id = "enemy_radar_melee_ring_color_g",
-                                type = "numeric",
-                                default_value = 180,
-                                range = {0, 255},
-                            },
-                            {
-                                setting_id = "enemy_radar_melee_ring_color_b",
-                                type = "numeric",
-                                default_value = 180,
-                                range = {0, 255},
+                                setting_id = "enemy_radar_melee_ring_color",
+                                type = "color",
+                                default_value = { 255, 165, 165, 165 },
+                                title = "enemy_radar_melee_ring_color",
                             },
                             {
                                 setting_id = "enemy_radar_melee_ring_opacity",

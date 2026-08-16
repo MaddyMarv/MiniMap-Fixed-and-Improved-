@@ -214,18 +214,6 @@ local loc = {
         en = "Show When Dead",
         ["zh-cn"] = "死亡时显示",
     },
-    minimap_background_color_r = {
-        en = "Background Color - Red",
-        ["zh-cn"] = "背景颜色 - 红",
-    },
-    minimap_background_color_g = {
-        en = "Background Color - Green",
-        ["zh-cn"] = "背景颜色 - 绿",
-    },
-    minimap_background_color_b = {
-        en = "Background Color - Blue",
-        ["zh-cn"] = "背景颜色 - 蓝",
-    },
     minimap_background_opacity = {
         en = "Background Opacity",
         ["zh-cn"] = "背景不透明度",
@@ -367,18 +355,6 @@ local loc = {
         en = "Melee Range (meters)",
         ["zh-cn"] = "近战范围（米）",
     },
-    enemy_radar_melee_ring_color_r = {
-        en = "Ring Color - Red",
-        ["zh-cn"] = "圆环颜色 - 红",
-    },
-    enemy_radar_melee_ring_color_g = {
-        en = "Ring Color - Green",
-        ["zh-cn"] = "圆环颜色 - 绿",
-    },
-    enemy_radar_melee_ring_color_b = {
-        en = "Ring Color - Blue",
-        ["zh-cn"] = "圆环颜色 - 蓝",
-    },
     enemy_radar_melee_ring_opacity = {
         en = "Melee Ring Opacity",
         ["zh-cn"] = "近战环不透明度",
@@ -439,305 +415,77 @@ local loc = {
         en = "Pox Hound",
         ["zh-cn"] = "瘟疫猎犬",
     },
-    color_chaos_hound_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_chaos_hound_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_chaos_hound_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_renegade_netgunner = {
         en = "Trapper",
         ["zh-cn"] = "捕兽者",
-    },
-    color_renegade_netgunner_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_renegade_netgunner_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_renegade_netgunner_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_renegade_sniper = {
         en = "Sniper",
         ["zh-cn"] = "血痂狙击手",
     },
-    color_renegade_sniper_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_renegade_sniper_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_renegade_sniper_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_flamer = {
         en = "Flamers (All)",
         ["zh-cn"] = "喷火兵（全部）",
-    },
-    color_flamer_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_flamer_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_flamer_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_grenadier = {
         en = "Grenadiers (All)",
         ["zh-cn"] = "掷弹兵（全部）",
     },
-    color_grenadier_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_grenadier_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_grenadier_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_chaos_poxwalker_bomber = {
         en = "Pox Bomber",
         ["zh-cn"] = "瘟疫自爆人",
-    },
-    color_chaos_poxwalker_bomber_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_chaos_poxwalker_bomber_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_chaos_poxwalker_bomber_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_executor = {
         en = "Executors (All)",
         ["zh-cn"] = "血痂重锤兵与粉碎者（全部）",
     },
-    color_executor_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_executor_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_executor_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_berzerker = {
         en = "Ragers (All)",
         ["zh-cn"] = "狂战士（全部）",
-    },
-    color_berzerker_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_berzerker_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_berzerker_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_renegade_plasma_gunner = {
         en = "Plasma Gunner",
         ["zh-cn"] = "血痂等离子炮手",
     },
-    color_renegade_plasma_gunner_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_renegade_plasma_gunner_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_renegade_plasma_gunner_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_chaos_ogryn_bulwark = {
         en = "Ogryn Bulwark",
         ["zh-cn"] = "盾卫",
-    },
-    color_chaos_ogryn_bulwark_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_chaos_ogryn_bulwark_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_chaos_ogryn_bulwark_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_special = {
         en = "Generic Special",
         ["zh-cn"] = "通用特殊",
     },
-    color_special_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_special_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_special_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_boss = {
         en = "Boss / Monstrosity",
         ["zh-cn"] = "首领/怪物",
-    },
-    color_boss_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_boss_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_boss_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_disabler = {
         en = "Disabler",
         ["zh-cn"] = "控制专家",
     },
-    color_disabler_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_disabler_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_disabler_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_sniper = {
         en = "Sniper",
         ["zh-cn"] = "狙击手",
-    },
-    color_sniper_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_sniper_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_sniper_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_shield = {
         en = "Shield",
         ["zh-cn"] = "盾兵",
     },
-    color_shield_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_shield_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_shield_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_ranged_elite = {
         en = "Ranged Elite",
         ["zh-cn"] = "远程精英",
-    },
-    color_ranged_elite_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_ranged_elite_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_ranged_elite_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     color_melee_elite = {
         en = "Melee Elite",
         ["zh-cn"] = "近战精英",
     },
-    color_melee_elite_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_melee_elite_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_melee_elite_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_horde = {
         en = "Horde",
         ["zh-cn"] = "尸潮",
     },
-    color_horde_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_horde_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_horde_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
-    },
     color_roamer = {
         en = "Roamer",
         ["zh-cn"] = "游荡者",
-    },
-    color_roamer_r = {
-        en = "Red",
-        ["zh-cn"] = "红",
-    },
-    color_roamer_g = {
-        en = "Green",
-        ["zh-cn"] = "绿",
-    },
-    color_roamer_b = {
-        en = "Blue",
-        ["zh-cn"] = "蓝",
     },
     distance_markers = {
         en = "Distance Markers",
@@ -804,18 +552,6 @@ local loc = {
         en = "Vertical Distance Transparency (0-255)",
         ["zh-cn"] = "高低箭头透明度(0-255)",
     },
-    distance_marker_vertical_arrow_color_r = {
-        en = "Arrow Color (Red)",
-        ["zh-cn"] = "箭头（红）",
-    },
-    distance_marker_vertical_arrow_color_g = {
-        en = "Arrow Color (Green)",
-        ["zh-cn"] = "箭头（绿）",
-    },
-    distance_marker_vertical_arrow_color_b = {
-        en = "Arrow Color (Blue)",
-        ["zh-cn"] = "箭头（蓝）",
-    },
     distance_marker_vertical_arrow_color = {
         en = "Vertical Arrow ARGB Color",
         ["zh-cn"] = "高低箭头ARGB色彩",
@@ -876,88 +612,108 @@ local loc = {
         en = "Floor Colors & Opacities",
         ["zh-cn"] = "楼层颜色和不透明度",
     },
-strike_map_floor_above = {
-    en = "Floor Above",
-    ["zh-cn"] = "上一层",
-},
-color_strike_map_floor_above = {
-    en = "Color (Above)",
-    ["zh-cn"] = "上层楼层颜色",
-},
-color_strike_map_floor_above_r = {
-    en = "Red",
-    ["zh-cn"] = "红",
-},
-color_strike_map_floor_above_g = {
-    en = "Green",
-    ["zh-cn"] = "绿",
-},
-color_strike_map_floor_above_b = {
-    en = "Blue",
-    ["zh-cn"] = "蓝",
-},
-color_strike_map_floor_above_opacity = {
-    en = "Opacity (Above)",
-    ["zh-cn"] = "上层楼层透明度",
-},
-strike_map_floor_current = {
-    en = "Current Floor",
-    ["zh-cn"] = "当前层",
-},
-color_strike_map_floor_current = {
-    en = "Color (Current)",
-    ["zh-cn"] = "当前层颜色",
-},
-color_strike_map_floor_current_r = {
-    en = "Red",
-    ["zh-cn"] = "红",
-},
-color_strike_map_floor_current_g = {
-    en = "Green",
-    ["zh-cn"] = "绿",
-},
-color_strike_map_floor_current_b = {
-    en = "Blue",
-    ["zh-cn"] = "蓝",
-},
-color_strike_map_floor_current_opacity = {
-    en = "Opacity (Current)",
-    ["zh-cn"] = "当前层透明度",
-},
-strike_map_floor_below = {
-    en = "Floor Below",
-    ["zh-cn"] = "下一层",
-},
-color_strike_map_floor_below = {
-    en = "Color (Below)",
-    ["zh-cn"] = "下层楼层颜色",
-},
-color_strike_map_floor_below_r = {
-    en = "Red",
-    ["zh-cn"] = "红",
-},
-color_strike_map_floor_below_g = {
-    en = "Green",
-    ["zh-cn"] = "绿",
-},
-color_strike_map_floor_below_b = {
-    en = "Blue",
-    ["zh-cn"] = "蓝",
-},
-color_strike_map_floor_below_opacity = {
-    en = "Opacity (Below)",
-    ["zh-cn"] = "下层楼层透明度",
-},
+    strike_map_floor_above = {
+        en = "Floor Above",
+        ["zh-cn"] = "上一层",
+    },
+    color_strike_map_floor_above = {
+        en = "Color (Above)",
+        ["zh-cn"] = "上层楼层颜色",
+    },
+    color_strike_map_floor_above_opacity = {
+        en = "Opacity (Above)",
+        ["zh-cn"] = "上层楼层透明度",
+    },
+    strike_map_floor_current = {
+        en = "Current Floor",
+        ["zh-cn"] = "当前层",
+    },
+    color_strike_map_floor_current = {
+        en = "Color (Current)",
+        ["zh-cn"] = "当前层颜色",
+    },
+    color_strike_map_floor_current_opacity = {
+        en = "Opacity (Current)",
+        ["zh-cn"] = "当前层透明度",
+    },
+    strike_map_floor_below = {
+        en = "Floor Below",
+        ["zh-cn"] = "下一层",
+    },
+    color_strike_map_floor_below = {
+        en = "Color (Below)",
+        ["zh-cn"] = "下层楼层颜色",
+    },
+    color_strike_map_floor_below_opacity = {
+        en = "Opacity (Below)",
+        ["zh-cn"] = "下层楼层透明度",
+    },
+    minimap_background_color = {
+        en = "Background Color",
+    },
+    enemy_radar_melee_ring_color = {
+        en = "Melee Ring Color",
+    },
+    distance_marker_vertical_arrow_color = {
+        en = "Vertical Arrow Color",
+    },
+    color_chaos_hound = {
+        en = "Chaos Hound Color",
+    },
+    color_renegade_netgunner = {
+        en = "Netgunner Color",
+    },
+    color_renegade_sniper = {
+        en = "Sniper (Renegade) Color",
+    },
+    color_flamer = {
+        en = "Flamer Color",
+    },
+    color_grenadier = {
+        en = "Grenadier Color",
+    },
+    color_chaos_poxwalker_bomber = {
+        en = "Poxwalker Bomber Color",
+    },
+    color_executor = {
+        en = "Executor Color",
+    },
+    color_berzerker = {
+        en = "Berzerker Color",
+    },
+    color_renegade_plasma_gunner = {
+        en = "Plasma Gunner Color",
+    },
+    color_chaos_ogryn_bulwark = {
+        en = "Bulwark Color",
+    },
+    color_boss = {
+        en = "Boss Color",
+    },
+    color_disabler = {
+        en = "Disabler Color",
+    },
+    color_sniper = {
+        en = "Sniper Color",
+    },
+    color_shield = {
+        en = "Shield Color",
+    },
+    color_ranged_elite = {
+        en = "Ranged Elite Color",
+    },
+    color_melee_elite = {
+        en = "Melee Elite Color",
+    },
+    color_special = {
+        en = "Special Color",
+    },
+    color_horde = {
+        en = "Horde Color",
+    },
+    color_roamer = {
+        en = "Roamer Color",
+    },
 }
-
-for _, color_name in ipairs(Color.list) do
-    local c = Color[color_name](255, true)
-    local text = string.format("{#color(%s,%s,%s)}%s{#reset()}", c[2], c[3], c[4], string.gsub(color_name, "_", " "))
-    if not loc[color_name] then
-        loc[color_name] = { en = text }
-    else
-        loc[color_name].en = text
-    end
-end
 
 return loc

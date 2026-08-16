@@ -69,12 +69,10 @@ HudElementMinimap._update_background_color = function(self)
     end
 
     local settings = mod.settings or {}
-    local r = settings.minimap_background_color_r or 180
-    local g = settings.minimap_background_color_g or 180
-    local b = settings.minimap_background_color_b or 180
+    local color = settings.minimap_background_color or { 255, 180, 180, 180 }
     local opacity = settings.minimap_background_opacity or 64
 
-    background_widget.style.circ.color = { opacity, r, g, b }
+    background_widget.style.circ.color = { opacity, color[2], color[3], color[4] }
 end
 
 local markers_data = {}
@@ -613,11 +611,9 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
                 circle_style.size[1] = ring_radius * 2
                 circle_style.size[2] = ring_radius * 2
 
-                local ring_r = settings.enemy_radar_melee_ring_color_r or 180
-                local ring_g = settings.enemy_radar_melee_ring_color_g or 180
-                local ring_b = settings.enemy_radar_melee_ring_color_b or 180
+                local ring_color = settings.enemy_radar_melee_ring_color or { 255, 165, 165, 165 }
                 local ring_opacity = settings.enemy_radar_melee_ring_opacity or 40
-                circle_style.color = { ring_opacity, ring_r, ring_g, ring_b }
+                circle_style.color = { ring_opacity, ring_color[2], ring_color[3], ring_color[4] }
 
                 melee_ring_widget.alpha_multiplier = 1.0
                 UIWidget.draw(melee_ring_widget, ui_renderer)
