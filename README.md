@@ -5,4 +5,13 @@ Standalone mod that gives you an actual working minimap on your screen. It is fu
 
 NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real mission map live! Please when you install it, disable their minimap in settings!
 
+
+**Options:**
+- X/Y Offset and Size
+- Background & Opacity (Colors, Transparency, Layering)
+- Radar Tracking (Enemies, Players, Companions, Pings, Objectives)
+- Visibility & Distance Rules (Scan Range, Target Limits, Priority Mode)
+- Icon & Display Customization (Styles, Outlines, Text, Indicators)
+- Environment Rendering (Contours, Stairs, Slopes, 3D Depth/Height)
+
 🔗 **Links:** [Source Code](https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-) | [Nexus Mods Profile](https://www.nexusmods.com/profile/indicabunny) | [Support Me on Ko-fi](https://ko-fi.com/indicabunny)
