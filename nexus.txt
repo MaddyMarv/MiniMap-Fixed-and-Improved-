@@ -1,0 +1,33 @@
+Standalone mod that gives you an actual working minimap on your screen. It is fully customizable so you can tweak the size, zoom level, and opacity. It tracks teammates and objectives so it makes it a lot easier to stay grouped up during fights and not get lost.
+
+NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real mission map live! Please when you install it, disable their minimap in settings!
+
+[b]Options:[/b]
+
+[b]General[/b]
+- Toggle Minimap (Hotkey)
+- Minimap Size & Zoom
+- Minimap Shape [Circle, Square]
+- Minimap Opacity
+- Horizontal Alignment [Center, Left, Right]
+- Vertical Alignment [Center, Top, Bottom]
+- Rotate With Player & Center on Player
+
+[b]Icons & Markers[/b]
+- Player & Teammate Icons (Show, Size, Colors)
+- Disabled Teammates [Show as normal (no status icons), Status icons only, Status icons + Health bar]
+- Dog Icon Style [Dog whistle, Dog icon]
+- Pickup Icons (Ammo, Medkits, Grimoires, Scriptures, Plasteel, Diamantine)
+- Objective Markers
+
+[b]Enemy Radar[/b]
+- Enable Enemy Radar & Range
+- Priority Mode [Threat (Type + Health), Distance, Health Only]
+- Radar Filter Options (Elites & Specials, Disablers, Monstrosities & Bosses, Normal Enemies)
+
+[b]Strike Map[/b]
+- Fullscreen Strike Map Toggle (Hotkey)
+- Strike Map Zoom & Pan
+- Strike Map Opacity
+
+[b]Links:[/b] [url=https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-]Source Code[/url] | [url=https://www.nexusmods.com/profile/indicabunny]Nexus Mods Profile[/url] | [url=https://ko-fi.com/indicabunny]Support Me on Ko-fi[/url]
