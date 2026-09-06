@@ -5,7 +5,7 @@ local loc = {
         ru = "Миникарта",
     },
     mod_description = {
-        en = "Add a minimap to your HUD.",
+        en = "Customizable minimap tracking teammates and objectives. Compatible with Strike Map.",
         ["zh-cn"] = "在抬头显示界面上显示小地图。",
         ru = "Minimap - Добавляет миникарту на ваш интерфейс.",
     },

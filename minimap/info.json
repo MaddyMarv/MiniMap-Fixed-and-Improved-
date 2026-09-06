@@ -7,7 +7,7 @@
     "funding": {
         "kofi": "https://ko-fi.com/indicabunny"
     },
-    "description": "Adds a functional and customizable minimap to your HUD.",
+    "description": "Customizable minimap tracking teammates and objectives. Compatible with Strike Map.",
     "dependencies": {
         "required": [],
         "self_after": [],
