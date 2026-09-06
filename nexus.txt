@@ -30,4 +30,5 @@ NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real missio
 - Strike Map Zoom & Pan
 - Strike Map Opacity
 
-[b]Links:[/b] [url=https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-]Source Code[/url] | [url=https://www.nexusmods.com/profile/indicabunny]Nexus Mods Profile[/url] | [url=https://ko-fi.com/indicabunny]Support Me on Ko-fi[/url]
+[b]Links:[/b]
+[url=https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-]Source Code[/url] | [url=https://www.nexusmods.com/profile/indicabunny]Nexus Mods Profile[/url] | [url=https://ko-fi.com/indicabunny]Support Me on Ko-fi[/url]
