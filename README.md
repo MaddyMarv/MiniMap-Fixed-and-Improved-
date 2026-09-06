@@ -6,6 +6,8 @@ Standalone mod that gives you an actual working minimap on your screen. It is fu
 NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real mission map live! Please when you install it, disable their minimap in settings!
 
 **Options:**
+
+**General**
 - Toggle Minimap (Hotkey)
 - Minimap Size & Zoom
 - Minimap Shape [Circle, Square]
@@ -13,7 +15,7 @@ NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real missio
 - Minimap Position X/Y
 - Rotate With Player & Center on Player
 
-**Icon Settings**
+**Icons & Markers**
 - Player & Teammate Icons (Show, Size, Colors)
 - Pickup Icons (Ammo, Medkits, Grimoires, Scriptures, Plasteel, Diamantine)
 - Objective Markers
