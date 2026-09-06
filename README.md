@@ -12,16 +12,20 @@ NOW SHOWS STRIKEMAP. If you install Strike Map mod, you can see the real missio
 - Minimap Size & Zoom
 - Minimap Shape [Circle, Square]
 - Minimap Opacity
-- Minimap Position X/Y
+- Horizontal Alignment [Center, Left, Right]
+- Vertical Alignment [Center, Top, Bottom]
 - Rotate With Player & Center on Player
 
 **Icons & Markers**
 - Player & Teammate Icons (Show, Size, Colors)
+- Disabled Teammates [Show as normal (no status icons), Status icons only, Status icons + Health bar]
+- Dog Icon Style [Dog whistle, Dog icon]
 - Pickup Icons (Ammo, Medkits, Grimoires, Scriptures, Plasteel, Diamantine)
 - Objective Markers
 
 **Enemy Radar**
 - Enable Enemy Radar & Range
+- Priority Mode [Threat (Type + Health), Distance, Health Only]
 - Radar Filter Options (Elites & Specials, Disablers, Monstrosities & Bosses, Normal Enemies)
 
 **Strike Map**
