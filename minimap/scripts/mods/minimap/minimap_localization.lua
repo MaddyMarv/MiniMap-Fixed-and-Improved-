@@ -263,229 +263,185 @@ local loc = {
         en = "Show Enemy Type Text",
         ["zh-cn"] = "显示敌人类型文本",
     },
-    enemy_radar_filters = {
-        en = "Filter by Breed",
-        ["zh-cn"] = "按类别筛选",
+    enemy_radar_settings = {
+        en = "Radar Settings",
     },
-    enemy_radar_limits = {
-        en = "Limit per Category",
-        ["zh-cn"] = "每类别数量上限",
+    title_enable_radar = {
+        en = "Enable on Radar",
+    },
+    title_color = {
+        en = "Color",
+    },
+    limit_category = {
+        en = "Radar Limit",
+    },
+    show_name_category = {
+        en = "Show Name on Radar",
+    },
+    group_human_bosses = {
+        en = "Human Bosses (Captains, Twins)",
+    },
+    group_monsters = {
+        en = "Monsters (Plague Ogryn, Chaos Spawn, Daemonhost)",
+    },
+    group_disablers = {
+        en = "Disablers (Hounds, Mutants, Trappers)",
+    },
+    group_ranged_specials = {
+        en = "Ranged Specials (Snipers, Flamers, Bombers)",
+    },
+    group_poxbursters = {
+        en = "Poxbursters",
+    },
+    group_ranged_elites = {
+        en = "Ranged Elites (Gunners, Shotgunners, Reapers)",
+    },
+    group_crushers_maulers = {
+        en = "Crushers & Maulers",
+    },
+    group_melee_elites = {
+        en = "Melee Elites (Ragers, Bulwarks)",
+    },
+    group_shooters = {
+        en = "Shooters (Dreg Stalker, Scab Shooter, Scab Stalker)",
+    },
+    group_chaff = {
+        en = "Chaff (Hordes, Roamers, Groaners, Poxwalkers)",
+    },
+    enemy_radar_filter_human_boss = {
+        en = "Human Bosses",
+    },
+    enemy_radar_filter_monster = {
+        en = "Monsters",
     },
     enemy_radar_filter_disabler = {
-        en = "Disablers (Hound/Mutant/Netter)",
-        ["zh-cn"] = "控制专家（猎犬/变种人/）",
+        en = "Disablers",
     },
-    enemy_radar_filter_sniper = {
-        en = "Snipers",
-        ["zh-cn"] = "狙击手",
+    enemy_radar_filter_ranged_special = {
+        en = "Ranged Specials",
     },
-    enemy_radar_filter_special = {
-        en = "Other Specials",
-        ["zh-cn"] = "其余专家",
-    },
-    enemy_radar_filter_shield = {
-        en = "Shields (Vanguards)",
-        ["zh-cn"] = "盾兵（先锋）",
+    enemy_radar_filter_poxburster = {
+        en = "Poxbursters",
     },
     enemy_radar_filter_ranged_elite = {
         en = "Ranged Elites",
-        ["zh-cn"] = "远程精英",
+    },
+    enemy_radar_filter_crushers_maulers = {
+        en = "Crushers & Maulers",
     },
     enemy_radar_filter_melee_elite = {
         en = "Melee Elites",
-        ["zh-cn"] = "近战精英",
     },
-    enemy_radar_filter_boss = {
-        en = "Boss/Monstrosity",
-        ["zh-cn"] = "首领/怪兽",
+    enemy_radar_filter_shooters = {
+        en = "Shooters",
     },
-    enemy_radar_filter_horde = {
-        en = "Horde",
-        ["zh-cn"] = "尸潮",
+    enemy_radar_filter_chaff = {
+        en = "Chaff",
     },
-    enemy_radar_filter_roamer = {
-        en = "Roamer",
-        ["zh-cn"] = "游荡者",
+    color_human_boss = {
+        en = "Human Boss Color",
+    },
+    color_monster = {
+        en = "Monster Color",
+    },
+    color_disabler = {
+        en = "Disabler Color",
+    },
+    color_ranged_special = {
+        en = "Ranged Special Color",
+    },
+    color_poxburster = {
+        en = "Poxburster Color",
+    },
+    color_ranged_elite = {
+        en = "Ranged Elite Color",
+    },
+    color_crushers_maulers = {
+        en = "Crushers & Maulers Color",
+    },
+    color_melee_elite = {
+        en = "Melee Elite Color",
+    },
+    color_shooters = {
+        en = "Shooters Color",
+    },
+    color_chaff = {
+        en = "Chaff Color",
+    },
+    enemy_radar_limit_human_boss = {
+        en = "Human Boss Limit",
+    },
+    enemy_radar_limit_monster = {
+        en = "Monster Limit",
     },
     enemy_radar_limit_disabler = {
         en = "Disabler Limit",
-        ["zh-cn"] = "控制专家上限",
     },
-    enemy_radar_limit_sniper = {
-        en = "Sniper Limit",
-        ["zh-cn"] = "狙击手上限",
+    enemy_radar_limit_ranged_special = {
+        en = "Ranged Special Limit",
     },
-    enemy_radar_limit_special = {
-        en = "Other Specials Limit",
-        ["zh-cn"] = "其余专家上限",
-    },
-    enemy_radar_limit_shield = {
-        en = "Shield Limit",
-        ["zh-cn"] = "盾兵上限",
+    enemy_radar_limit_poxburster = {
+        en = "Poxburster Limit",
     },
     enemy_radar_limit_ranged_elite = {
         en = "Ranged Elite Limit",
-        ["zh-cn"] = "远程精英上限",
+    },
+    enemy_radar_limit_crushers_maulers = {
+        en = "Crushers & Maulers Limit",
     },
     enemy_radar_limit_melee_elite = {
         en = "Melee Elite Limit",
-        ["zh-cn"] = "近战精英上限",
     },
-    enemy_radar_limit_boss = {
-        en = "Boss Limit",
-        ["zh-cn"] = "头目上限",
+    enemy_radar_limit_shooters = {
+        en = "Shooters Limit",
     },
-    enemy_radar_limit_horde = {
-        en = "Horde Limit",
-        ["zh-cn"] = "尸潮上限",
-    },
-    enemy_radar_limit_roamer = {
-        en = "Roamer Limit",
-        ["zh-cn"] = "游荡者上限",
-    },
-    enemy_radar_melee_ring = {
-        en = "Melee Range Ring",
-        ["zh-cn"] = "近战范围环",
-    },
-    enemy_radar_melee_ring_enabled = {
-        en = "Show Melee Range Ring",
-        ["zh-cn"] = "显示近战范围环",
-    },
-    enemy_radar_melee_range = {
-        en = "Melee Range (meters)",
-        ["zh-cn"] = "近战范围（米）",
-    },
-    enemy_radar_melee_ring_opacity = {
-        en = "Melee Ring Opacity",
-        ["zh-cn"] = "近战环不透明度",
-    },
-    enemy_colors = {
-        en = "Enemy Colors",
-        ["zh-cn"] = "敌人颜色",
-    },
-    enemy_colors_specials = {
-        en = "Special Enemy Colors",
-        ["zh-cn"] = "特殊敌人颜色",
-    },
-    enemy_colors_elites = {
-        en = "Specific Elite Colors",
-        ["zh-cn"] = "特定精英颜色",
-    },
-    enemy_colors_generic = {
-        en = "Generic Category Colors",
-        ["zh-cn"] = "通用类别颜色",
-    },
-    enemy_name_filters = {
-        en = "Enemy Name Filters",
-        ["zh-cn"] = "敌人名称筛选",
+    enemy_radar_limit_chaff = {
+        en = "Chaff Limit",
     },
     enemy_name_filter_only_pinged = {
         en = "Only Show Names If Pinged",
-        ["zh-cn"] = "仅在标记时显示名称",
     },
-    enemy_name_filter_boss = {
-        en = "Show Boss Names",
-        ["zh-cn"] = "显示头目名称",
+    enemy_name_filter_human_boss = {
+        en = "Show Human Boss Names",
+    },
+    enemy_name_filter_monster = {
+        en = "Show Monster Names",
     },
     enemy_name_filter_disabler = {
         en = "Show Disabler Names",
-        ["zh-cn"] = "显示控制者名称",
     },
-    enemy_name_filter_sniper = {
-        en = "Show Sniper Names",
-        ["zh-cn"] = "显示狙击手名称",
+    enemy_name_filter_ranged_special = {
+        en = "Show Ranged Special Names",
     },
-    enemy_name_filter_special = {
-        en = "Show Special Names",
-        ["zh-cn"] = "显示特殊敌人名称",
-    },
-    enemy_name_filter_shield = {
-        en = "Show Shield Names",
-        ["zh-cn"] = "显示盾卫名称",
+    enemy_name_filter_poxburster = {
+        en = "Show Poxburster Names",
     },
     enemy_name_filter_ranged_elite = {
         en = "Show Ranged Elite Names",
-        ["zh-cn"] = "显示远程精英名称",
+    },
+    enemy_name_filter_crushers_maulers = {
+        en = "Show Crusher & Mauler Names",
     },
     enemy_name_filter_melee_elite = {
         en = "Show Melee Elite Names",
-        ["zh-cn"] = "显示近战精英名称",
     },
-    color_chaos_hound = {
-        en = "Pox Hound",
-        ["zh-cn"] = "瘟疫猎犬",
+    enemy_name_filter_shooters = {
+        en = "Show Shooter Names",
     },
-    color_renegade_netgunner = {
-        en = "Trapper",
-        ["zh-cn"] = "捕兽者",
+    enemy_name_filter_chaff = {
+        en = "Show Chaff Names",
     },
-    color_renegade_sniper = {
-        en = "Sniper",
-        ["zh-cn"] = "血痂狙击手",
+    enemy_radar_melee_ring = {
+        en = "Melee Range Ring",
     },
-    color_flamer = {
-        en = "Flamers (All)",
-        ["zh-cn"] = "喷火兵（全部）",
+    enemy_radar_melee_ring_enabled = {
+        en = "Show Melee Range Ring",
     },
-    color_grenadier = {
-        en = "Grenadiers (All)",
-        ["zh-cn"] = "掷弹兵（全部）",
+    enemy_radar_melee_range = {
+        en = "Melee Range (meters)",
     },
-    color_chaos_poxwalker_bomber = {
-        en = "Pox Bomber",
-        ["zh-cn"] = "瘟疫自爆人",
-    },
-    color_executor = {
-        en = "Executors (All)",
-        ["zh-cn"] = "血痂重锤兵与粉碎者（全部）",
-    },
-    color_berzerker = {
-        en = "Ragers (All)",
-        ["zh-cn"] = "狂战士（全部）",
-    },
-    color_renegade_plasma_gunner = {
-        en = "Plasma Gunner",
-        ["zh-cn"] = "血痂等离子炮手",
-    },
-    color_chaos_ogryn_bulwark = {
-        en = "Ogryn Bulwark",
-        ["zh-cn"] = "盾卫",
-    },
-    color_special = {
-        en = "Generic Special",
-        ["zh-cn"] = "通用特殊",
-    },
-    color_boss = {
-        en = "Boss / Monstrosity",
-        ["zh-cn"] = "首领/怪物",
-    },
-    color_disabler = {
-        en = "Disabler",
-        ["zh-cn"] = "控制专家",
-    },
-    color_sniper = {
-        en = "Sniper",
-        ["zh-cn"] = "狙击手",
-    },
-    color_shield = {
-        en = "Shield",
-        ["zh-cn"] = "盾兵",
-    },
-    color_ranged_elite = {
-        en = "Ranged Elite",
-        ["zh-cn"] = "远程精英",
-    },
-    color_melee_elite = {
-        en = "Melee Elite",
-        ["zh-cn"] = "近战精英",
-    },
-    color_horde = {
-        en = "Horde",
-        ["zh-cn"] = "尸潮",
-    },
-    color_roamer = {
-        en = "Roamer",
-        ["zh-cn"] = "游荡者",
+    enemy_radar_melee_ring_opacity = {
+        en = "Melee Ring Opacity",
     },
     distance_markers = {
         en = "Distance Markers",
@@ -656,63 +612,6 @@ local loc = {
     },
     distance_marker_vertical_arrow_color = {
         en = "Vertical Arrow Color",
-    },
-    color_chaos_hound = {
-        en = "Chaos Hound Color",
-    },
-    color_renegade_netgunner = {
-        en = "Netgunner Color",
-    },
-    color_renegade_sniper = {
-        en = "Sniper (Renegade) Color",
-    },
-    color_flamer = {
-        en = "Flamer Color",
-    },
-    color_grenadier = {
-        en = "Grenadier Color",
-    },
-    color_chaos_poxwalker_bomber = {
-        en = "Poxwalker Bomber Color",
-    },
-    color_executor = {
-        en = "Executor Color",
-    },
-    color_berzerker = {
-        en = "Berzerker Color",
-    },
-    color_renegade_plasma_gunner = {
-        en = "Plasma Gunner Color",
-    },
-    color_chaos_ogryn_bulwark = {
-        en = "Bulwark Color",
-    },
-    color_boss = {
-        en = "Boss Color",
-    },
-    color_disabler = {
-        en = "Disabler Color",
-    },
-    color_sniper = {
-        en = "Sniper Color",
-    },
-    color_shield = {
-        en = "Shield Color",
-    },
-    color_ranged_elite = {
-        en = "Ranged Elite Color",
-    },
-    color_melee_elite = {
-        en = "Melee Elite Color",
-    },
-    color_special = {
-        en = "Special Color",
-    },
-    color_horde = {
-        en = "Horde Color",
-    },
-    color_roamer = {
-        en = "Roamer Color",
     },
 }
 

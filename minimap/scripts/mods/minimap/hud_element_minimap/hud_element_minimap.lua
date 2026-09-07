@@ -107,16 +107,29 @@ local pinged_units = {}
 local companion_targeted_units = {}
 local tracked_enemy_units = {}
 local broadphase_results = {}
+local ENEMY_CATEGORIES_IN_ORDER = {
+    "human_boss",
+    "monster",
+    "disabler",
+    "poxburster",
+    "ranged_special",
+    "crushers_maulers",
+    "ranged_elite",
+    "melee_elite",
+    "shooters",
+    "chaff",
+}
 local enemy_markers_by_type = {
-    boss = {},
+    human_boss = {},
+    monster = {},
     disabler = {},
-    sniper = {},
-    shield = {},
+    ranged_special = {},
+    poxburster = {},
     ranged_elite = {},
+    crushers_maulers = {},
     melee_elite = {},
-    special = {},
-    horde = {},
-    roamer = {},
+    shooters = {},
+    chaff = {},
 }
 local non_enemy_markers = {}
 local enemy_template = { name = "enemy" }
@@ -325,10 +338,11 @@ HudElementMinimap._collect_markers = function(self)
         current_marker_count = current_marker_count + 1
     end
 
-    for breed_type, markers in pairs(enemy_markers_by_type) do
+    for _, breed_type in ipairs(ENEMY_CATEGORIES_IN_ORDER) do
         if current_marker_count >= MAX_MARKERS then break end
+        local markers = enemy_markers_by_type[breed_type]
         local limit = enemy_radar_limits[breed_type] or 0
-        if limit > 0 and #markers > 0 then
+        if limit > 0 and markers and #markers > 0 then
             if priority_mode == "distance" then
                 table_sort(markers, sort_by_distance)
             else
