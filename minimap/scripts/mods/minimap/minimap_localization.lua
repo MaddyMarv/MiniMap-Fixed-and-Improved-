@@ -273,7 +273,7 @@ local loc = {
         en = "Color",
     },
     limit_category = {
-        en = "Radar Limit",
+        en = "Radar Limit (0 = Unlimited)",
     },
     show_name_category = {
         en = "Show Name on Radar",

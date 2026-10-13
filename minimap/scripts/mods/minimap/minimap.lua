@@ -434,19 +434,19 @@ local function collect_settings()
     end
 
     mod.settings.enemy_radar_limits = {
-        human_boss = get_limit("enemy_radar_limit_human_boss", "enemy_radar_limit_boss", 5),
-        monster = get_limit("enemy_radar_limit_monster", "enemy_radar_limit_boss", 5),
-        disabler = get_limit("enemy_radar_limit_disabler", nil, 10),
-        ranged_special = get_limit("enemy_radar_limit_ranged_special", "enemy_radar_limit_special", 10),
-        poxburster = get_limit("enemy_radar_limit_poxburster", "enemy_radar_limit_special", 10),
-        ranged_elite = get_limit("enemy_radar_limit_ranged_elite", nil, 10),
-        crushers_maulers = get_limit("enemy_radar_limit_crushers_maulers", "enemy_radar_limit_melee_elite", 10),
-        melee_elite = get_limit("enemy_radar_limit_melee_elite", nil, 10),
-        shooters = get_limit("enemy_radar_limit_shooters", "enemy_radar_limit_roamer", 10),
-        chaff = get_limit("enemy_radar_limit_chaff", "enemy_radar_limit_horde", 10),
+        human_boss = get_limit("enemy_radar_limit_human_boss", "enemy_radar_limit_boss", 0),
+        monster = get_limit("enemy_radar_limit_monster", "enemy_radar_limit_boss", 0),
+        disabler = get_limit("enemy_radar_limit_disabler", nil, 0),
+        ranged_special = get_limit("enemy_radar_limit_ranged_special", "enemy_radar_limit_special", 0),
+        poxburster = get_limit("enemy_radar_limit_poxburster", "enemy_radar_limit_special", 0),
+        ranged_elite = get_limit("enemy_radar_limit_ranged_elite", nil, 0),
+        crushers_maulers = get_limit("enemy_radar_limit_crushers_maulers", "enemy_radar_limit_melee_elite", 0),
+        melee_elite = get_limit("enemy_radar_limit_melee_elite", nil, 0),
+        shooters = get_limit("enemy_radar_limit_shooters", "enemy_radar_limit_roamer", 20),
+        chaff = get_limit("enemy_radar_limit_chaff", "enemy_radar_limit_horde", 20),
     }
 
-    mod.settings.enemy_radar_priority_mode = mod:get("enemy_radar_priority_mode") or "damage"
+    mod.settings.enemy_radar_priority_mode = mod:get("enemy_radar_priority_mode") or "distance"
 
     mod.settings.enemy_clustering_enabled = mod:get("enemy_clustering_enabled")
     mod.settings.enemy_clustering_radius = mod:get("enemy_clustering_radius") or 3.0
