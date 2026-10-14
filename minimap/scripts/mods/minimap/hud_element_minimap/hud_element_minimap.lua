@@ -56,6 +56,10 @@ HudElementMinimap._cb_register_world_markers_list = function(self, world_markers
 end
 
 HudElementMinimap.update = function(self, dt, t, ui_renderer, render_settings, input_service)
+    if not mod:is_enabled() then
+        return
+    end
+
     HudElementMinimap.super.update(self, dt, t, ui_renderer, render_settings, input_service)
 
     if not self._registered_world_markers then
@@ -639,6 +643,10 @@ HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_render
 end
 
 HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_renderer)
+    if not mod:is_enabled() then
+        return
+    end
+
     local settings = mod.settings or {}
     local show_in_hub = settings.show_in_hub
     local show_in_shooting_range = settings.show_in_shooting_range

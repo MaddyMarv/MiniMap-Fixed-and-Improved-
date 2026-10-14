@@ -405,17 +405,19 @@ mod:add_require_path("minimap/scripts/mods/minimap/hud_element_minimap/templates
 mod:add_require_path("minimap/scripts/mods/minimap/hud_element_minimap/templates/unknown")
 
 mod:hook("UIHud", "init", function(func, self, elements, visibility_groups, params)
-    for _, hud_element in ipairs(hud_elements) do
-        if not table.find_by_key(elements, "class_name", hud_element.class_name) then
-            table.insert(elements, {
-                class_name = hud_element.class_name,
-                filename = hud_element.filename,
-                use_hud_scale = true,
-                visibility_groups = {
-                    "alive",
-                    "communication_wheel"
-                },
-            })
+    if mod:is_enabled() then
+        for _, hud_element in ipairs(hud_elements) do
+            if not table.find_by_key(elements, "class_name", hud_element.class_name) then
+                table.insert(elements, {
+                    class_name = hud_element.class_name,
+                    filename = hud_element.filename,
+                    use_hud_scale = true,
+                    visibility_groups = {
+                        "alive",
+                        "communication_wheel"
+                    },
+                })
+            end
         end
     end
 
@@ -464,12 +466,22 @@ local function recreate_hud()
 
             local peer_id = player:peer_id()
             local local_player_id = player:local_player_id()
-            local elements = hud._element_definitions
+            local elements = table.clone(hud._element_definitions)
             local visibility_groups = hud._visibility_groups
+
+            if not mod:is_enabled() then
+                for i = #elements, 1, -1 do
+                    if elements[i].class_name == "HudElementMinimap" then
+                        table.remove(elements, i)
+                    end
+                end
+            end
 
             hud:destroy()
             ui_manager:create_player_hud(peer_id, local_player_id, elements, visibility_groups)
-            update_minimap_style_settings(ui_manager._hud)
+            if mod:is_enabled() then
+                update_minimap_style_settings(ui_manager._hud)
+            end
 end
 
 local function collect_settings()
@@ -607,6 +619,18 @@ end
 mod.on_all_mods_loaded = function()
     collect_settings()
     recreate_hud()
+end
+
+mod.on_enabled = function(is_initial_call)
+    if not is_initial_call then
+        recreate_hud()
+    end
+end
+
+mod.on_disabled = function(is_initial_call)
+    if not is_initial_call then
+        recreate_hud()
+    end
 end
 
 local hud_recreate_timer = 0
