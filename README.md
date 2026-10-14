@@ -25,6 +25,7 @@ Customizable minimap tracking teammates and objectives. Compatible with Strike M
 - Enable Enemy Radar & Range
 - Priority Mode [Threat (Type + Health), Distance, Health Only]
 - Radar Filter Options (Elites & Specials, Disablers, Monstrosities & Bosses, Normal Enemies)
+- Override Specific Enemy Coloring (Individual colors for all Specials & Elites)
 
 **Strike Map**
 - Fullscreen Strike Map Toggle (Hotkey)

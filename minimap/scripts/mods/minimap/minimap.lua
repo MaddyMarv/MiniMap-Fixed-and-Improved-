@@ -16,6 +16,52 @@ local default_enemy_colors = {
     chaff = { 255, 105, 55, 20 },
 }
 
+local default_specific_enemy_colors = {
+    hound = { 255, 0, 255, 0 },
+    trapper = { 255, 0, 255, 0 },
+    mutant = { 255, 0, 255, 0 },
+    sniper = { 255, 0, 255, 255 },
+    flamer = { 255, 0, 255, 255 },
+    bomber = { 255, 0, 255, 255 },
+    poxburster = { 255, 255, 255, 0 },
+    crusher = { 255, 255, 80, 0 },
+    mauler = { 255, 255, 80, 0 },
+    gunner = { 255, 0, 0, 255 },
+    plasma_gunner = { 255, 0, 0, 255 },
+    reaper = { 255, 0, 0, 255 },
+    shotgunner = { 255, 0, 0, 255 },
+    rager = { 255, 81, 53, 146 },
+    bulwark = { 255, 81, 53, 146 },
+}
+
+local specific_breed_to_type = {
+    chaos_hound = "hound",
+    chaos_hound_mutator = "hound",
+    chaos_armored_hound = "hound",
+    renegade_netgunner = "trapper",
+    cultist_mutant = "mutant",
+    cultist_mutant_mutator = "mutant",
+    mutant_charger = "mutant",
+    renegade_sniper = "sniper",
+    renegade_flamer = "flamer",
+    renegade_flamer_mutator = "flamer",
+    cultist_flamer = "flamer",
+    renegade_grenadier = "bomber",
+    cultist_grenadier = "bomber",
+    chaos_poxwalker_bomber = "poxburster",
+    chaos_ogryn_executor = "crusher",
+    renegade_executor = "mauler",
+    renegade_gunner = "gunner",
+    cultist_gunner = "gunner",
+    renegade_plasma_gunner = "plasma_gunner",
+    chaos_ogryn_gunner = "reaper",
+    renegade_shocktrooper = "shotgunner",
+    cultist_shocktrooper = "shotgunner",
+    renegade_berzerker = "rager",
+    cultist_berzerker = "rager",
+    chaos_ogryn_bulwark = "bulwark",
+}
+
 local function load_enemy_colors_from_settings()
     local colors = {}
     for category, default_col in pairs(default_enemy_colors) do
@@ -40,13 +86,77 @@ local function load_enemy_colors_from_settings()
     return colors
 end
 
+local function load_specific_enemy_colors_from_settings()
+    local colors = {}
+    for enemy_type, default_col in pairs(default_specific_enemy_colors) do
+        local saved = mod:get("color_override_" .. enemy_type)
+        if saved and type(saved) == "table" and #saved >= 4 then
+            colors[enemy_type] = saved
+        else
+            colors[enemy_type] = default_col
+        end
+    end
+    return colors
+end
+
 mod.settings.enemy_colors = load_enemy_colors_from_settings()
+mod.settings.override_specific_enemy_coloring = false
+mod.settings.specific_enemy_colors = load_specific_enemy_colors_from_settings()
 
 function mod.get_category_color(category)
     if mod.settings.enemy_colors and mod.settings.enemy_colors[category] then
         return mod.settings.enemy_colors[category]
     end
     return default_enemy_colors[category] or { 255, 255, 255, 255 }
+end
+
+function mod.get_specific_enemy_type(unit)
+    if not unit then return nil end
+    local unit_data_extension = ScriptUnit.has_extension(unit, "unit_data_system")
+    if not unit_data_extension then return nil end
+    local breed = unit_data_extension:breed()
+    if not breed then return nil end
+
+    local breed_name = breed.name
+    local mapped = specific_breed_to_type[breed_name]
+    if mapped then
+        return mapped
+    end
+
+    local tags = breed.tags
+    if tags then
+        if tags.hound or string.find(breed_name, "hound") then return "hound" end
+        if tags.netgunner or string.find(breed_name, "netgunner") then return "trapper" end
+        if tags.mutant or string.find(breed_name, "mutant") then return "mutant" end
+        if tags.sniper or string.find(breed_name, "sniper") then return "sniper" end
+        if string.find(breed_name, "flamer") then return "flamer" end
+        if string.find(breed_name, "grenadier") then return "bomber" end
+        if string.find(breed_name, "plasma") then return "plasma_gunner" end
+        if string.find(breed_name, "gunner") then
+            if tags.ogryn or string.find(breed_name, "ogryn") then return "reaper" end
+            return "gunner"
+        end
+        if string.find(breed_name, "shocktrooper") then return "shotgunner" end
+        if string.find(breed_name, "berzerker") then return "rager" end
+        if string.find(breed_name, "bulwark") then return "bulwark" end
+        if string.find(breed_name, "executor") then
+            if tags.ogryn or string.find(breed_name, "ogryn") then return "crusher" end
+            return "mauler"
+        end
+        if tags.bomber or string.find(breed_name, "poxwalker_bomber") then return "poxburster" end
+    end
+
+    return nil
+end
+
+function mod.get_enemy_color(unit, breed_type)
+    if mod.settings.override_specific_enemy_coloring then
+        local specific_type = mod.get_specific_enemy_type(unit)
+        if specific_type and mod.settings.specific_enemy_colors and mod.settings.specific_enemy_colors[specific_type] then
+            return mod.settings.specific_enemy_colors[specific_type]
+        end
+    end
+    return mod.get_category_color(breed_type)
 end
 
 mod.fallback_breed_colors = mod.settings.enemy_colors
@@ -400,11 +510,13 @@ local function collect_settings()
     mod.settings.minimap_background_opacity = mod:get("minimap_background_opacity")
 
     mod.settings.enemy_radar_enabled = mod:get("enemy_radar_enabled")
-    mod.settings.enemy_radar_scan_range = mod:get("enemy_radar_scan_range") or 50.0
+    mod.settings.enemy_radar_scan_range = math.min(mod:get("enemy_radar_scan_range") or 50.0, 50.0)
 
 
     mod.settings.enemy_colors = load_enemy_colors_from_settings()
     mod.fallback_breed_colors = mod.settings.enemy_colors
+    mod.settings.override_specific_enemy_coloring = mod:get("override_specific_enemy_coloring")
+    mod.settings.specific_enemy_colors = load_specific_enemy_colors_from_settings()
 
     local function get_filter(key, fallback_key, default_val)
         local val = mod:get(key)
@@ -507,7 +619,7 @@ mod.on_setting_changed = function(setting_id)
 
     collect_settings()
 
-    if string.find(setting_id, "^color_") then
+    if string.find(setting_id, "^color_") or setting_id == "override_specific_enemy_coloring" then
         return
     end
 
@@ -528,5 +640,12 @@ mod.on_setting_changed = function(setting_id)
         recreate_hud()
     end
 end
+
+mod.debug_scan_logging = false
+
+mod:command("minimap_debug", "Toggle minimap scan diagnostic logging", function()
+    mod.debug_scan_logging = not mod.debug_scan_logging
+    mod:echo("Minimap scan diagnostics: " .. (mod.debug_scan_logging and "ENABLED" or "DISABLED"))
+end)
 
 mod:io_dofile("minimap/scripts/mods/minimap/compatibility/minimap_strikemap")

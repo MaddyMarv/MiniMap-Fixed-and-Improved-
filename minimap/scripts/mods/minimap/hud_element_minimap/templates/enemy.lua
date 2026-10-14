@@ -102,14 +102,19 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
         end
     else
         local breed_type = marker.breed_type or "roamer"
-        local category_color = settings.enemy_colors and settings.enemy_colors[breed_type]
-        if not category_color and minimap_mod and minimap_mod.get_category_color then
-            category_color = minimap_mod.get_category_color(breed_type)
+        local enemy_color
+        if minimap_mod and minimap_mod.get_enemy_color then
+            enemy_color = minimap_mod.get_enemy_color(marker.unit, breed_type)
+        else
+            enemy_color = settings.enemy_colors and settings.enemy_colors[breed_type]
+            if not enemy_color and minimap_mod and minimap_mod.get_category_color then
+                enemy_color = minimap_mod.get_category_color(breed_type)
+            end
         end
-        if not category_color then
-            category_color = { 255, 255, 255, 255 }
+        if not enemy_color then
+            enemy_color = { 255, 255, 255, 255 }
         end
-        apply_color_to_texture(icon, { alpha, category_color[2], category_color[3], category_color[4] })
+        apply_color_to_texture(icon, { alpha, enemy_color[2], enemy_color[3], enemy_color[4] })
     end
 
     local distance_text_style = widget.style.distance_text

@@ -613,6 +613,57 @@ local loc = {
     distance_marker_vertical_arrow_color = {
         en = "Vertical Arrow Color",
     },
+    group_specific_enemy_colors = {
+        en = "Specific Enemy Colors (Specials & Elites)",
+    },
+    override_specific_enemy_coloring = {
+        en = "Override Specific Enemy Coloring",
+    },
+    color_override_hound = {
+        en = "Hound",
+    },
+    color_override_trapper = {
+        en = "Trapper",
+    },
+    color_override_mutant = {
+        en = "Mutant",
+    },
+    color_override_sniper = {
+        en = "Sniper",
+    },
+    color_override_flamer = {
+        en = "Flamer (Scab & Dreg)",
+    },
+    color_override_bomber = {
+        en = "Bomber (Scab & Dreg)",
+    },
+    color_override_poxburster = {
+        en = "Poxburster",
+    },
+    color_override_crusher = {
+        en = "Crusher",
+    },
+    color_override_mauler = {
+        en = "Mauler",
+    },
+    color_override_gunner = {
+        en = "Gunner (Scab & Dreg)",
+    },
+    color_override_plasma_gunner = {
+        en = "Plasma Gunner",
+    },
+    color_override_reaper = {
+        en = "Reaper",
+    },
+    color_override_shotgunner = {
+        en = "Shotgunner (Scab & Dreg)",
+    },
+    color_override_rager = {
+        en = "Rager (Scab & Dreg)",
+    },
+    color_override_bulwark = {
+        en = "Bulwark",
+    },
 }
 
 return loc

@@ -39,6 +39,7 @@ HudElementMinimap.init = function(self, parent, draw_layer, start_scale)
     self._cached_markers = {}
     self._enemy_marker_pool = {}
     self._enemy_marker_pool_size = 0
+    self._persistent_enemies = {}
 
     self:set_scenegraph_position("minimap", mod:get("minimap_offset_x"), mod:get("minimap_offset_y"), 0, mod:get("minimap_horizontal_alignment"), mod:get("minimap_vertical_alignment"))
 end
@@ -132,8 +133,35 @@ local enemy_markers_by_type = {
     chaff = {},
 }
 local non_enemy_markers = {}
+local all_enemy_candidates = {}
 local enemy_template = { name = "enemy" }
 local scratch_absorbed_by_this_root = {}
+local reported_draw_errors = {}
+
+local marker_name_to_icon = {
+    location_attention = "attention",
+    location_ping = "ping",
+    location_threat = "threat",
+    unit_threat = "threat",
+    unit_threat_adamant = "companion_target",
+    unit_threat_companion = "companion_target",
+    unit_threat_veteran = "companion_target",
+    nameplate = "player",
+    nameplate_party = "teammate",
+    nameplate_party_hud = "teammate",
+    nameplate_combat = "teammate",
+    nameplate_companion = "teammate",
+    nameplate_companion_hub = "player",
+    ringhud_teammate_tile = "teammate",
+    objective = "objective",
+    player_assistance = "none",
+    interaction = "interactable",
+
+    health_bar = "none",
+    color_coded_healthbar = "enemy",
+    custom_healthbar = "enemy",
+    enemy = "enemy",
+}
 
 local _marker_info_pool = {}
 local function get_marker_info(index)
@@ -191,6 +219,7 @@ HudElementMinimap._collect_markers = function(self)
         table_clear(list)
     end
     table_clear(non_enemy_markers)
+    table_clear(all_enemy_candidates)
     local marker_info_index = 0
 
     local settings = mod.settings or {}
@@ -228,6 +257,16 @@ HudElementMinimap._collect_markers = function(self)
         end
     end
 
+    local t_now = Managers.time and Managers.time:time("main") or 0
+    local persistent_enemies = self._persistent_enemies
+    if not persistent_enemies then
+        persistent_enemies = {}
+        self._persistent_enemies = persistent_enemies
+    end
+
+    local raw_broadphase_count = 0
+    local pool_index = 0
+
     if enemy_radar_enabled then
         local local_player = Managers.player:local_player(1)
         if local_player then
@@ -243,11 +282,11 @@ HudElementMinimap._collect_markers = function(self)
                     if side then
                         local from_pos = Unit.world_position(player_unit, 1)
                         local enemy_side_names = side:relation_side_names("enemy")
-                        local max_range = settings.enemy_radar_scan_range or 50.0
+                        local max_range = math.min(settings.enemy_radar_scan_range or 50.0, 50.0)
 
                         table_clear(broadphase_results)
                         local count = broadphase.query(broadphase, from_pos, max_range, broadphase_results, enemy_side_names)
-                        local pool_index = 0
+                        raw_broadphase_count = count or 0
 
                         if count and count > 0 then
                             for i = 1, count do
@@ -255,45 +294,81 @@ HudElementMinimap._collect_markers = function(self)
                                 if Unit.alive(enemy_unit) then
                                     local health_extension = ScriptUnit.has_extension(enemy_unit, "health_system")
                                     local is_enemy_alive = not health_extension or health_extension:is_alive()
-                                    if is_enemy_alive then
-                                        if not pinged_units[enemy_unit] and not companion_targeted_units[enemy_unit] then
-                                            local breed_type, threat_score = mod.classify_and_score_unit(enemy_unit)
-                                            if breed_type and enemy_radar_filters[breed_type] then
-                                                tracked_enemy_units[enemy_unit] = true
-
-                                                pool_index = pool_index + 1
-                                                local pooled = get_or_grow_pool(self, pool_index)
-                                                local enemy_pos = Unit.world_position(enemy_unit, 1)
-                                                pooled.unit = enemy_unit
-                                                pooled.pos_x = Vector3.x(enemy_pos)
-                                                pooled.pos_y = Vector3.y(enemy_pos)
-                                                pooled.pos_z = Vector3.z(enemy_pos)
-                                                pooled.cluster_count = 1
-                                                pooled.breed_type = breed_type
-
-                                                local azimuth, range, vertical_distance = self:_get_marker_azimuth_range(pooled)
-                                                marker_info_index = marker_info_index + 1
-                                                local marker_info = get_marker_info(marker_info_index)
-                                                marker_info.azimuth = azimuth
-                                                marker_info.range = range
-                                                marker_info.vertical_distance = vertical_distance
-                                                marker_info.name = "enemy"
-                                                marker_info.marker = pooled
-                                                local proximity_score = math.max(0, 50 - range) * 10
-                                                marker_info.threat_score = threat_score + proximity_score
-
-                                                local type_markers = enemy_markers_by_type[breed_type]
-                                                type_markers[#type_markers + 1] = marker_info
+                                    if is_enemy_alive and not pinged_units[enemy_unit] and not companion_targeted_units[enemy_unit] then
+                                        local breed_type, threat_score = mod.classify_and_score_unit(enemy_unit)
+                                        if breed_type and enemy_radar_filters[breed_type] then
+                                            local entry = persistent_enemies[enemy_unit]
+                                            if not entry then
+                                                entry = {}
+                                                persistent_enemies[enemy_unit] = entry
                                             end
+                                            entry.last_seen_t = t_now
+                                            entry.breed_type = breed_type
+                                            entry.threat_score = threat_score
+                                            entry.unit = enemy_unit
                                         end
                                     end
                                 end
+                            end
+                        end
+
+                        local PERSISTENCE_TIMEOUT = 1.0
+                        local max_range_sq = (max_range + 3) * (max_range + 3)
+
+                        for enemy_unit, entry in pairs(persistent_enemies) do
+                            local is_valid = false
+                            if Unit.alive(enemy_unit) and Unit.world(enemy_unit) then
+                                local health_extension = ScriptUnit.has_extension(enemy_unit, "health_system")
+                                local is_enemy_alive = not health_extension or health_extension:is_alive()
+                                if is_enemy_alive and not pinged_units[enemy_unit] and not companion_targeted_units[enemy_unit] then
+                                    if (t_now - entry.last_seen_t) <= PERSISTENCE_TIMEOUT then
+                                        local enemy_pos = Unit.world_position(enemy_unit, 1)
+                                        local dist_sq = Vector3.distance_squared(from_pos, enemy_pos)
+                                        if dist_sq <= max_range_sq then
+                                            is_valid = true
+                                        end
+                                    end
+                                end
+                            end
+
+                            if is_valid then
+                                tracked_enemy_units[enemy_unit] = true
+
+                                pool_index = pool_index + 1
+                                local pooled = get_or_grow_pool(self, pool_index)
+                                local enemy_pos = Unit.world_position(enemy_unit, 1)
+                                pooled.unit = enemy_unit
+                                pooled.pos_x = Vector3.x(enemy_pos)
+                                pooled.pos_y = Vector3.y(enemy_pos)
+                                pooled.pos_z = Vector3.z(enemy_pos)
+                                pooled.cluster_count = 1
+                                pooled.breed_type = entry.breed_type
+
+                                local azimuth, range, vertical_distance = self:_get_marker_azimuth_range(pooled)
+                                marker_info_index = marker_info_index + 1
+                                local marker_info = get_marker_info(marker_info_index)
+                                marker_info.azimuth = azimuth
+                                marker_info.range = range
+                                marker_info.vertical_distance = vertical_distance
+                                marker_info.name = "enemy"
+                                marker_info.marker = pooled
+                                local proximity_score = math.max(0, 50 - range) * 10
+                                marker_info.threat_score = entry.threat_score + proximity_score
+
+                                local type_markers = enemy_markers_by_type[entry.breed_type]
+                                if type_markers then
+                                    type_markers[#type_markers + 1] = marker_info
+                                end
+                            else
+                                persistent_enemies[enemy_unit] = nil
                             end
                         end
                     end
                 end
             end
         end
+    else
+        table_clear(persistent_enemies)
     end
 
     if world_markers_list then
@@ -313,17 +388,25 @@ HudElementMinimap._collect_markers = function(self)
                 local is_enemy_marker = (template_name == "color_coded_healthbar" or template_name == "custom_healthbar")
 
                 if not is_enemy_marker or not (marker.unit and tracked_enemy_units[marker.unit]) then
-                    local azimuth, range, vertical_distance = self:_get_marker_azimuth_range(marker)
-                    marker_info_index = marker_info_index + 1
-                    local marker_info = get_marker_info(marker_info_index)
-                    marker_info.azimuth = azimuth
-                    marker_info.range = range
-                    marker_info.vertical_distance = vertical_distance
-                    marker_info.name = template_name
-                    marker_info.marker = marker
-                    marker_info.threat_score = 0
+                    local icon_name = marker_name_to_icon[template_name]
+                    local is_visible = icon_name and icon_name ~= "none" and icon_name ~= "unknown"
+                    if is_visible and settings.icon_vis then
+                        is_visible = settings.icon_vis[template_name] or false
+                    end
 
-                    non_enemy_markers[#non_enemy_markers + 1] = marker_info
+                    if is_visible then
+                        local azimuth, range, vertical_distance = self:_get_marker_azimuth_range(marker)
+                        marker_info_index = marker_info_index + 1
+                        local marker_info = get_marker_info(marker_info_index)
+                        marker_info.azimuth = azimuth
+                        marker_info.range = range
+                        marker_info.vertical_distance = vertical_distance
+                        marker_info.name = template_name
+                        marker_info.marker = marker
+                        marker_info.threat_score = 0
+
+                        non_enemy_markers[#non_enemy_markers + 1] = marker_info
+                    end
                 end
             end
         end
@@ -343,39 +426,40 @@ HudElementMinimap._collect_markers = function(self)
         current_marker_count = current_marker_count + 1
     end
 
+    local total_clustered_absorbed = 0
+
     for _, breed_type in ipairs(ENEMY_CATEGORIES_IN_ORDER) do
-        if current_marker_count >= MAX_MARKERS then break end
         local markers = enemy_markers_by_type[breed_type]
-        local limit = enemy_radar_limits[breed_type] or 0
-        if limit <= 0 then
-            limit = MAX_MARKERS
-        end
-        if markers and #markers > 0 then
+        local num_markers = markers and #markers or 0
+
+        if num_markers > 0 then
             if priority_mode == "distance" then
                 table_sort(markers, sort_by_distance)
             else
                 table_sort(markers, sort_by_threat)
             end
 
-            local num_candidates = math.min(#markers, limit)
             local clustered_indices = {}
-            if settings.enemy_clustering_enabled and num_candidates > 1 then
+            if settings.enemy_clustering_enabled and num_markers > 1 then
                 local cluster_radius = settings.enemy_clustering_radius or 3.0
                 local cluster_threshold = settings.enemy_clustering_threshold or 3
                 local cluster_radius_sq = cluster_radius * cluster_radius
-                for i = 1, num_candidates do
+
+                for i = 1, num_markers do
                     if not clustered_indices[i] then
                         local root_marker = markers[i]
                         root_marker.marker.cluster_count = 1
                         local absorbed_by_this_root = scratch_absorbed_by_this_root
                         table_clear(absorbed_by_this_root)
-                        for j = i + 1, num_candidates do
+
+                        for j = i + 1, num_markers do
                             if not clustered_indices[j] then
                                 local target_marker = markers[j]
                                 local dx = root_marker.marker.pos_x - target_marker.marker.pos_x
                                 local dy = root_marker.marker.pos_y - target_marker.marker.pos_y
                                 local dz = root_marker.marker.pos_z - target_marker.marker.pos_z
-                                local dist_sq = dx*dx + dy*dy + dz*dz
+                                local dist_sq = dx * dx + dy * dy + dz * dz
+
                                 if dist_sq <= cluster_radius_sq then
                                     clustered_indices[j] = true
                                     absorbed_by_this_root[#absorbed_by_this_root + 1] = j
@@ -384,26 +468,64 @@ HudElementMinimap._collect_markers = function(self)
                                 end
                             end
                         end
+
                         if root_marker.marker.cluster_count < cluster_threshold then
                             root_marker.marker.cluster_count = 1
                             for _, j in ipairs(absorbed_by_this_root) do
                                 clustered_indices[j] = nil
                                 markers[j].marker.cluster_count = 1
                             end
+                        else
+                            total_clustered_absorbed = total_clustered_absorbed + (root_marker.marker.cluster_count - 1)
                         end
                     end
                 end
             end
 
-            for i = 1, num_candidates do
-                if current_marker_count >= MAX_MARKERS then break end
+            local limit = enemy_radar_limits[breed_type] or 0
+            if limit <= 0 then
+                limit = MAX_MARKERS
+            end
 
+            local category_count = 0
+            for i = 1, num_markers do
                 if not clustered_indices[i] then
-                    markers_data[#markers_data + 1] = markers[i]
-                    current_marker_count = current_marker_count + 1
+                    all_enemy_candidates[#all_enemy_candidates + 1] = markers[i]
+                    category_count = category_count + 1
+                    if category_count >= limit then
+                        break
+                    end
                 end
             end
         end
+    end
+
+    if #all_enemy_candidates > 1 then
+        if priority_mode == "distance" then
+            table_sort(all_enemy_candidates, sort_by_distance)
+        else
+            table_sort(all_enemy_candidates, sort_by_threat)
+        end
+    end
+
+    for _, marker_info in ipairs(all_enemy_candidates) do
+        if current_marker_count >= MAX_MARKERS then break end
+        markers_data[#markers_data + 1] = marker_info
+        current_marker_count = current_marker_count + 1
+    end
+
+    if mod.debug_scan_logging then
+        mod:info(
+            string.format(
+                "[Minimap Scan] Broadphase: %d | Tracked: %d | World vis: %d | Enemies eligible: %d | Absorbed in clusters: %d | Total drawn: %d",
+                raw_broadphase_count,
+                pool_index,
+                #non_enemy_markers,
+                #all_enemy_candidates,
+                total_clustered_absorbed,
+                #markers_data
+            )
+        )
     end
 
     return markers_data
@@ -456,31 +578,6 @@ local function get_hfov(vfov)
     return hfov
 end
 
-local marker_name_to_icon = {
-    location_attention = "attention",
-    location_ping = "ping",
-    location_threat = "threat",
-    unit_threat = "threat",
-    unit_threat_adamant = "companion_target",
-    unit_threat_companion = "companion_target",
-    unit_threat_veteran = "companion_target",
-    nameplate = "player",
-    nameplate_party = "teammate",
-    nameplate_party_hud = "teammate",
-    nameplate_combat = "teammate",
-    nameplate_companion = "teammate",
-    nameplate_companion_hub = "player",
-    ringhud_teammate_tile = "teammate",
-    objective = "objective",
-    player_assistance = "none",
-    interaction = "interactable",
-
-    health_bar = "none",
-    color_coded_healthbar = "enemy",
-    custom_healthbar = "enemy",
-    enemy = "enemy",
-}
-
 local function get_icon_name_from_marker_info(marker_info)
     local settings = mod.settings or {}
 
@@ -532,10 +629,12 @@ HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_render
     local y = radius * -math_cos(azimuth)
 
     local update_function = self._icon_update_functions_by_name[icon_name]
-    local ok = pcall(update_function, widget, marker_info.marker, x, y, vertical_distance, range, is_out_of_range)
+    local ok, err = pcall(update_function, widget, marker_info.marker, x, y, vertical_distance, range, is_out_of_range)
 
     if ok then
         UIWidget.draw(widget, ui_renderer)
+    else
+        self:_log_draw_error(icon_name, err)
     end
 end
 
@@ -654,6 +753,21 @@ HudElementMinimap._draw_widgets = function(self, dt, t, input_service, ui_render
     for i = 1, #cached do
         self:_draw_widget_by_marker(cached[i], ui_renderer, camera_position, camera_forward)
     end
+end
+
+HudElementMinimap._log_draw_error = function(self, icon_name, err)
+    local err_key = tostring(icon_name) .. ":" .. tostring(err)
+    if not reported_draw_errors[err_key] then
+        reported_draw_errors[err_key] = true
+        mod:error("Error rendering icon '%s': %s", tostring(icon_name), tostring(err))
+    end
+end
+
+HudElementMinimap.destroy = function(self, ui_renderer)
+    self._persistent_enemies = nil
+    self._cached_markers = nil
+    self._enemy_marker_pool = nil
+    HudElementMinimap.super.destroy(self, ui_renderer)
 end
 
 return HudElementMinimap
