@@ -1,7 +1,7 @@
 Customizable minimap tracking teammates and objectives. Compatible with Strike Map.
 
-[b]Options:[/b]
-
+[b]Mod Settings / Commands:[/b]
+[spoiler]
 [b]General[/b]
 - Toggle Minimap (Hotkey)
 - Minimap Size & Zoom
@@ -28,6 +28,7 @@ Customizable minimap tracking teammates and objectives. Compatible with Strike M
 - Fullscreen Strike Map Toggle (Hotkey)
 - Strike Map Zoom & Pan
 - Strike Map Opacity
+[/spoiler]
 
 [b]Links:[/b]
 [url=https://github.com/MaddyMarv/MiniMap-Fixed-and-Improved-]Source Code[/url] | [url=https://www.nexusmods.com/profile/indicabunny]Nexus Mods Profile[/url] | [url=https://ko-fi.com/indicabunny]Support Me on Ko-fi[/url]
