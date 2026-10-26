@@ -88,16 +88,23 @@ local function is_bot_marker(marker)
     end
 
     local data = marker.data
-    local player = data.player
+    if rawget(data, "__deleted") then
+        return false
+    end
 
-    if not player and data.player_unit then
+    local player = rawget(data, "player")
+    if not player and type(data.is_human_controlled) == "function" then
+        player = data
+    end
+
+    if not player and data.player_unit and Unit.alive(data.player_unit) then
         local pm = Managers.player
         if pm and pm.player_by_unit then
             player = pm:player_by_unit(data.player_unit)
         end
     end
 
-    if not player then
+    if not player or rawget(player, "__deleted") then
         return false
     end
 
@@ -239,7 +246,9 @@ HudElementMinimap._collect_markers = function(self)
     if world_markers_list then
         for i = 1, #world_markers_list do
             local marker = world_markers_list[i]
-            local template_name = marker.template.name
+            local marker_data = marker.data
+            if not (marker_data and rawget(marker_data, "__deleted")) then
+                local template_name = marker.template.name
             local is_ping_marker = (template_name == "location_ping" or
                                     template_name == "location_threat" or
                                     template_name == "unit_threat")
@@ -412,6 +421,7 @@ HudElementMinimap._collect_markers = function(self)
                         non_enemy_markers[#non_enemy_markers + 1] = marker_info
                     end
                 end
+            end
             end
         end
     end
@@ -605,6 +615,16 @@ local function get_icon_name_from_marker_info(marker_info)
 end
 
 HudElementMinimap._draw_widget_by_marker = function(self, marker_info, ui_renderer, camera_position, camera_forward)
+    local marker = marker_info.marker
+    if not marker then
+        return
+    end
+
+    local marker_data = marker.data
+    if marker_data and rawget(marker_data, "__deleted") then
+        return
+    end
+
     local icon_name = get_icon_name_from_marker_info(marker_info)
 
     if icon_name == "none" or icon_name == "unknown" then

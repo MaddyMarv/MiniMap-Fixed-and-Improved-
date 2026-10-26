@@ -92,10 +92,23 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
 
     if not color_to_apply then
         local data = marker.data
+        if not data or rawget(data, "__deleted") then
+            return
+        end
         local player = data.player
-        local tagger_player = data.tag_instance:tagger_player()
-        local player_slot = (tagger_player or player):slot()
-        color_to_apply = UISettings.player_slot_colors[player_slot] or icon.default_color
+        if player and rawget(player, "__deleted") then
+            player = nil
+        end
+        local tagger_player = nil
+        if data.tag_instance and not rawget(data.tag_instance, "__deleted") and data.tag_instance.tagger_player then
+            tagger_player = data.tag_instance:tagger_player()
+        end
+        if tagger_player and rawget(tagger_player, "__deleted") then
+            tagger_player = nil
+        end
+        local target_player = tagger_player or player
+        local player_slot = target_player and not rawget(target_player, "__deleted") and target_player.slot and target_player:slot()
+        color_to_apply = (player_slot and UISettings.player_slot_colors[player_slot]) or icon.default_color
     end
 
     apply_color_to_texture(icon, color_to_apply)

@@ -161,6 +161,9 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     status_icon_ring_style.offset[2] = y
 
     local data = marker.data
+    if not data or rawget(data, "__deleted") or not data.slot then
+        return
+    end
     local player_slot = data:slot()
     local unit = data.player_unit
 
@@ -187,6 +190,9 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
             local player_unit_spawn_manager = Managers.state.player_unit_spawn
             if player_unit_spawn_manager then
                 owner_player = player_unit_spawn_manager:owner(unit)
+                if owner_player and rawget(owner_player, "__deleted") then
+                    owner_player = nil
+                end
                 if owner_player then
                     owner_unit = owner_player.player_unit
                 end
@@ -269,9 +275,11 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
 
                 local target_slot = player_slot
                 local owner_profile = nil
-                if owner_player then
+                if owner_player and not rawget(owner_player, "__deleted") then
                     target_slot = owner_player:slot()
                     owner_profile = owner_player:profile()
+                else
+                    owner_player = nil
                 end
 
                 if dog_icon_style == "class_icon" and owner_profile then

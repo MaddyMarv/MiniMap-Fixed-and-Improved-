@@ -91,15 +91,22 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
 
     if not color_to_apply then
         local data = marker.data
-        local player = data and data.player
+        if not data or rawget(data, "__deleted") then
+            return
+        end
+        local player = data.player
+        if player and rawget(player, "__deleted") then
+            player = nil
+        end
         local tagger_player = nil
-        if data and data.tag_instance and data.tag_instance.tagger_player then
+        if data.tag_instance and not rawget(data.tag_instance, "__deleted") and data.tag_instance.tagger_player then
             local success, result = pcall(function() return data.tag_instance:tagger_player() end)
-            if success then
+            if success and result and not rawget(result, "__deleted") then
                 tagger_player = result
             end
         end
-        local player_slot = (tagger_player or player) and (tagger_player or player):slot() or 1
+        local target_player = tagger_player or player
+        local player_slot = target_player and not rawget(target_player, "__deleted") and target_player.slot and target_player:slot() or 1
         color_to_apply = UISettings.player_slot_colors[player_slot] or Color.ui_hud_green_light(255, true)
     end
 

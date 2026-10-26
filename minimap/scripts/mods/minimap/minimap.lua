@@ -321,17 +321,24 @@ end
 
 function mod.get_player_display_name(marker)
     if not marker or not marker.data then return nil end
+    local data = marker.data
+    if rawget(data, "__deleted") then return nil end
 
-    if marker.data.player then
-        return marker.data.player:name()
+    if type(data.name) == "function" then
+        return data:name()
     end
 
-    if marker.data.player_unit then
-        local player_unit = marker.data.player_unit
+    local player = rawget(data, "player")
+    if player and not rawget(player, "__deleted") and type(player.name) == "function" then
+        return player:name()
+    end
+
+    local player_unit = rawget(data, "player_unit")
+    if player_unit and Unit.alive(player_unit) then
         local player_unit_spawn_manager = Managers.state.player_unit_spawn
-        local player = player_unit_spawn_manager and player_unit_spawn_manager:owner(player_unit)
-        if player then
-            return player:name()
+        local owner = player_unit_spawn_manager and player_unit_spawn_manager:owner(player_unit)
+        if owner and not rawget(owner, "__deleted") and type(owner.name) == "function" then
+            return owner:name()
         end
     end
 
@@ -340,6 +347,8 @@ end
 
 function mod.get_companion_display_name(marker)
     if not marker or not marker.data then return nil end
+    local data = marker.data
+    if rawget(data, "__deleted") then return nil end
 
     if type(marker.data) == "table" and type(marker.data.companion_name) == "function" then
         local name = marker.data:companion_name()

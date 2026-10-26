@@ -143,6 +143,9 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
     status_icon_ring_style.offset[2] = y
 
     local data = marker.data
+    if not data or rawget(data, "__deleted") or not data.slot then
+        return
+    end
     local player_slot = data:slot()
     local unit = data.player_unit
 
