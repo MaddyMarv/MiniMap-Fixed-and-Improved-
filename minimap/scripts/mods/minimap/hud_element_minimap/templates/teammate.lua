@@ -372,11 +372,7 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 
                 local slot_color = UISettings.player_slot_colors[player_slot] or Color.ui_hud_green_light(255, true)
                 facing_arrow.color = { slot_color[1], slot_color[2], slot_color[3], slot_color[4] }
-                
-                if is_vertical_threshold_exceeded then
-                    facing_arrow.color[1] = mod:get("distance_marker_vertical_transparency") or 40
-                end
-                
+
                 facing_arrow.visible = true
             else
                 facing_arrow.visible = false

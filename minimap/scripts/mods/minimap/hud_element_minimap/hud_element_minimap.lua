@@ -249,23 +249,24 @@ HudElementMinimap._collect_markers = function(self)
             local marker_data = marker.data
             if not (marker_data and rawget(marker_data, "__deleted")) then
                 local template_name = marker.template.name
-            local is_ping_marker = (template_name == "location_ping" or
-                                    template_name == "location_threat" or
-                                    template_name == "unit_threat")
-            local is_companion_target = (template_name == "unit_threat_adamant" or template_name == "unit_threat_companion" or template_name == "unit_threat_veteran")
+                local is_ping_marker = (template_name == "location_ping" or
+                                        template_name == "location_threat" or
+                                        template_name == "unit_threat")
+                local is_companion_target = (template_name == "unit_threat_adamant" or template_name == "unit_threat_companion" or template_name == "unit_threat_veteran")
 
-            if is_ping_marker and marker.unit then
-                if template_name == "unit_threat" then
-                    if unit_threat_vis then
+                if is_ping_marker and marker.unit then
+                    if template_name == "unit_threat" then
+                        if unit_threat_vis then
+                            pinged_units[marker.unit] = true
+                        end
+                    else
                         pinged_units[marker.unit] = true
                     end
-                else
-                    pinged_units[marker.unit] = true
                 end
-            end
 
-            if is_companion_target and marker.unit and unit_threat_adamant_vis then
-                companion_targeted_units[marker.unit] = true
+                if is_companion_target and marker.unit and unit_threat_adamant_vis then
+                    companion_targeted_units[marker.unit] = true
+                end
             end
         end
     end
@@ -421,7 +422,6 @@ HudElementMinimap._collect_markers = function(self)
                         non_enemy_markers[#non_enemy_markers + 1] = marker_info
                     end
                 end
-            end
             end
         end
     end
