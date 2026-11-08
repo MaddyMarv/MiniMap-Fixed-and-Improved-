@@ -242,19 +242,12 @@ template.update_function = function(widget, marker, x, y, vertical_distance, ran
                 vertical_arrow_overlay_style.visible = false
             end
         end
-        vertical_str = ""
     end
 
     if should_show then
         local distance_m = math.floor(range * 10) / 10
         local distance_str = string.format("%.1fm", distance_m)
-        if vertical_str ~= "" then
-            distance_str = vertical_str .. " " .. distance_str
-        end
         widget.content.distance_text = distance_str
-        distance_text_style.visible = true
-    elseif vertical_str ~= "" and icon.visible ~= false then
-        widget.content.distance_text = vertical_str
         distance_text_style.visible = true
     else
         widget.content.distance_text = ""
